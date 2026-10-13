@@ -1,0 +1,111 @@
+/* =========================================================
+   SHIZUKU 雫 — journal.css
+   rain on the window, the latest letter, all the letters, a note on the glass, the reader
+   (uses the shared sections from home.css: .getin, .hero-*, .index-head)
+   concept, design & code by ghostly.grl ♥
+   ========================================================= */
+body[data-page="journal"] { background: var(--ink); color: #fff; }
+
+/* =========================================================
+   01 · RAIN ON THE WINDOW
+   ========================================================= */
+.jr-hero { position: relative; height: 100vh; height: 100svh; min-height: 620px; overflow: hidden; background: #0b0d10; color: #fff; isolation: isolate; }
+.jr-hero-media.slot { position: absolute; inset: -4%; aspect-ratio: auto; border: 0; border-radius: 0; background: radial-gradient(70% 60% at 50% 40%, #2a3138, #0b0d10 75%); }
+.jr-hero-media > img { top: 0; height: 100%; filter: blur(7px) brightness(.62) saturate(.85); transform: scale(1.04); }
+.jr-hero-media .slot-label { left: auto; right: calc(var(--gutter) + 4%); top: 120px; bottom: auto; width: 260px; text-align: right; z-index: 6; color: #fff; }
+.jr-hero-media .slot-label small { color: rgba(255, 255, 255, .55); }
+.jr-rain { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; }
+.jr-hero .float-layer { z-index: 3; }
+.jr-hero::after { content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none; background: radial-gradient(120% 80% at 50% 50%, transparent 50%, rgba(5, 7, 9, .6)); }
+.jr-hero .hero-info, .jr-hero .hero-vert, .jr-hero .hero-foot { z-index: 6; }
+.jr-title {
+  position: absolute; left: 0; right: 0; top: 47%; z-index: 5; translate: 0 -55%;
+  display: flex; justify-content: center; gap: .3em; padding-left: .3em;
+  font: 300 clamp(52px, 11vw, 200px)/1 var(--sans); color: #fff; pointer-events: none;
+}
+.jr-title span { display: inline-block; will-change: transform, filter, opacity; }
+.jr-sub { position: absolute; z-index: 6; right: calc(var(--gutter) + 6vw); top: calc(47% + clamp(44px, 7.5vw, 130px)); font-size: clamp(20px, 2vw, 30px); line-height: 1.1; text-align: right; }
+
+/* =========================================================
+   02 · THE LATEST LETTER
+   ========================================================= */
+.jr-feat { position: relative; background: var(--ink); padding: 140px var(--gutter) 100px; overflow: hidden; }
+.jr-feat .kicker { position: relative; z-index: 2; color: rgba(255, 255, 255, .55); margin-bottom: 36px; }
+.feat { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(30px, 5vw, 90px); align-items: center; cursor: pointer; }
+.feat-ph { margin: 0; border-radius: 26px; overflow: hidden; border: 3px solid #0b0b0c; }
+.feat-ph .slot { aspect-ratio: 4 / 3; border-radius: 23px; }
+.feat-ph .slot > img { transition: transform 1.4s var(--ease); }
+.feat:hover .feat-ph .slot > img { transform: scale(1.05); }
+.feat-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
+.feat-meta { display: flex; gap: 18px; color: rgba(255, 255, 255, .55); }
+.feat-meta span + span { color: var(--lotus); }
+.feat-title { font: 300 clamp(40px, 4.6vw, 80px)/1 var(--sans); letter-spacing: -.035em; }
+.feat-ex { font: italic 300 clamp(20px, 1.7vw, 27px)/1.3 var(--serif); color: rgba(255, 255, 255, .85); max-width: 34ch; }
+
+/* =========================================================
+   03 · ALL THE LETTERS
+   ========================================================= */
+.jr-list { position: relative; background: var(--ink); padding: 80px var(--gutter) 140px; overflow: hidden; }
+.jr-list .index-head { position: relative; z-index: 3; color: rgba(255, 255, 255, .5); }
+.jr-list .kicker { color: rgba(255, 255, 255, .55); }
+.jr-list .float-layer span { transition: opacity .6s; }
+.letters { position: relative; z-index: 3; margin: 0; padding: 0; list-style: none; }
+.letter { border-bottom: 1px solid rgba(255, 255, 255, .12); transition: opacity .6s var(--ease); }
+.letters:hover .letter:not(:hover) { opacity: .3; }
+.letter button { width: 100%; display: grid; grid-template-columns: 110px minmax(0, 1fr) 220px 70px; gap: 20px; align-items: center; padding: clamp(18px, 2.2vw, 30px) 0; text-align: left; }
+.letter .l-date { font: 400 11px/1.3 var(--mono); color: rgba(255, 255, 255, .5); }
+.letter .l-title { font: 300 clamp(26px, 3.4vw, 58px)/1.05 var(--sans); letter-spacing: -.03em; transition: letter-spacing 1s var(--ease), color .5s; }
+.letter:hover .l-title { letter-spacing: .02em; color: var(--lotus); }
+.letter .l-by { font: italic 300 18px/1.2 var(--serif); color: rgba(255, 255, 255, .7); }
+.letter .l-min { font: 400 11px/1 var(--mono); color: rgba(255, 255, 255, .5); text-align: right; }
+/* a strip of the photo opens under the line on hover */
+.letter .l-strip { display: block; height: 0; overflow: hidden; border-radius: 16px; transition: height .8s var(--ease), margin .8s var(--ease); }
+.letter .l-strip .slot { aspect-ratio: auto; height: 160px; border-radius: 16px; }
+.letter:hover .l-strip { height: 160px; margin-bottom: 22px; }
+
+/* =========================================================
+   04 · A NOTE ON THE GLASS
+   ========================================================= */
+.jr-note { position: relative; background: var(--ink); padding: 120px var(--gutter) 140px; overflow: hidden; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 50px; align-items: center; }
+.jr-note .kicker { grid-column: 1 / -1; position: relative; z-index: 2; color: rgba(255, 255, 255, .55); }
+.jr-note-title { position: relative; z-index: 2; font: 300 clamp(48px, 6vw, 104px)/.95 var(--sans); letter-spacing: -.05em; }
+.jr-note-title em { color: var(--lotus); letter-spacing: -.02em; }
+.glass-note { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 16px; }
+.glass-pane { position: relative; aspect-ratio: 16 / 9; border-radius: 26px; overflow: hidden; border: 3px solid #0b0b0c; background: url("../img/JOURNAL/hero.jpg") center / cover, #1a1f24; }
+.glass-pane canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.glass-text { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; text-align: center; font: italic 300 clamp(30px, 4vw, 64px)/1.05 var(--serif); color: transparent; pointer-events: none; }
+.glass-hint { color: rgba(255, 255, 255, .45); }
+
+/* =========================================================
+   THE READER
+   ========================================================= */
+.reader { position: fixed; inset: 0; z-index: 210; background: rgba(8, 10, 12, .96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); visibility: hidden; opacity: 0; clip-path: inset(100% 0 0 0); }
+.reader-scroll { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; }
+.reader-close { position: fixed; right: var(--gutter); top: 20px; z-index: 2; }
+.rd { width: min(760px, calc(100% - 2 * var(--gutter))); margin: 0 auto; padding: 110px 0 120px; display: flex; flex-direction: column; gap: 28px; }
+.rd-meta { color: rgba(255, 255, 255, .55); display: flex; gap: 18px; flex-wrap: wrap; }
+.rd-meta b { color: var(--lotus); font-weight: 400; }
+.rd-title { font: 300 clamp(40px, 6vw, 92px)/1 var(--sans); letter-spacing: -.04em; }
+.rd-ph { margin: 0; border-radius: 22px; overflow: hidden; border: 3px solid #0b0b0c; }
+.rd-ph .slot { border-radius: 19px; }
+.rd-body { display: flex; flex-direction: column; gap: 22px; font: 300 clamp(20px, 1.6vw, 24px)/1.6 var(--serif); color: rgba(255, 255, 255, .9); }
+.rd-body p:first-child::first-letter { float: left; font: 300 4.2em/.8 var(--sans); margin: .08em .12em 0 0; color: var(--lotus); }
+.rd-sign { text-align: right; }
+.rd-sign .swash { font-size: 54px; line-height: 1; }
+.rd-nav { display: flex; justify-content: space-between; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, .14); color: rgba(255, 255, 255, .7); }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+  .feat { grid-template-columns: 1fr; }
+  .letter button { grid-template-columns: 80px minmax(0, 1fr) 50px; }
+  .letter .l-by { display: none; }
+  .jr-note { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  .jr-sub { right: var(--gutter); }
+  .letter button { grid-template-columns: 1fr auto; gap: 8px; }
+  .letter .l-date { grid-column: 1 / -1; }
+  .letter:hover .l-strip, .letter .l-strip { height: 0; margin: 0; }
+}

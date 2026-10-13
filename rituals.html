@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rituals — SHIZUKU 雫</title>
+  <meta name="description" content="Six rituals 1,840 m up in the fog: the fog walk, the snow bath, the night room, the guardians at dawn, the tea hour, listening to the falls. Light one, then stop doing things.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter+Tight:wght@200;300;400;500;600&family=Monsieur+La+Doulaise&family=Noto+Serif+JP:wght@300;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/rituals.css">
+</head>
+<!--
+   SHIZUKU 雫 — rituals
+   concept, design & code by ghostly.grl ♥
+-->
+<body id="top" data-page="rituals">
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="drop" viewBox="0 0 20 28"><path d="M10 1 C10 1 2 11.5 2 18 A8 8 0 0 0 18 18 C18 11.5 10 1 10 1Z"/></symbol>
+      <filter id="wobble" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence id="wobbleTurb" type="fractalNoise" baseFrequency="0.008 0.024" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap id="wobbleMap" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ============ LOADER ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <svg class="loader-wave" viewBox="0 0 1440 80" preserveAspectRatio="none"><path id="loaderWave" d="M0 40 Q 180 10 360 40 T 720 40 T 1080 40 T 1440 40 V80 H0Z"/></svg>
+    <div class="loader-drop"><svg><use href="#drop"/></svg></div>
+    <div class="loader-rings"><i></i><i></i><i></i></div>
+    <div class="loader-inner">
+      <p class="loader-kanji jp">儀</p>
+      <p class="loader-word">r i t u a l s</p>
+      <div class="loader-bar"><i id="loaderBar"></i></div>
+      <p class="loader-line mono"><span id="loaderMsg">lighting the incense</span><span><b id="loaderTemp">12.0</b>°</span></p>
+    </div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="cursor" id="cursor" aria-hidden="true"><i></i><span></span></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="topnav" id="topnav">
+    <a class="nav-logo" href="index.html" aria-label="SHIZUKU — home">shizuku <span class="jp">雫</span></a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="index.html"><span data-t="Home">Home</span></a></li>
+        <li><a href="rooms.html"><span data-t="The rooms">The rooms</span></a></li>
+        <li><a href="baths.html"><span data-t="The baths">The baths</span></a></li>
+        <li><a href="rituals.html" aria-current="page"><span data-t="Rituals">Rituals</span></a></li>
+        <li><a href="mountain.html"><span data-t="The mountain">The mountain</span></a></li>
+        <li><a href="journal.html"><span data-t="Journal">Journal</span></a></li>
+      </ul>
+    </nav>
+    <div class="status mono" aria-label="Up here right now">
+      <span class="status-open" id="statusOpen"><i></i>open now</span>
+      <span>visibility <b id="depth">12.0</b> m</span>
+      <span>water <b id="temp">38.0</b>°</span>
+    </div>
+    <a class="pill solid nav-cta" href="book.html" data-magnetic data-cursor="come up">Book a stay <svg class="d"><use href="#drop"/></svg></a>
+    <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+  </header>
+  <div class="menu" id="menu" aria-hidden="true">
+    <ul>
+      <li><a href="index.html"><small>(01)</small>Home</a></li>
+      <li><a href="rooms.html"><small>(02)</small>The rooms</a></li>
+      <li><a href="baths.html"><small>(03)</small>The baths</a></li>
+      <li><a href="rituals.html"><small>(04)</small>Rituals</a></li>
+      <li><a href="mountain.html"><small>(05)</small>The mountain</a></li>
+      <li><a href="journal.html"><small>(06)</small>Journal</a></li>
+      <li><a href="book.html"><small>(07)</small>Book a stay</a></li>
+    </ul>
+    <p class="mono">1,840 m · in the fog · water at 38° · no phones past the curtain</p>
+  </div>
+
+  <main>
+
+    <!-- ============ 01 · INCENSE ============ -->
+    <section class="rt-hero" id="rtHero">
+      <div class="rt-hero-media slot dark" data-img="RITUALS/hero.jpg" data-alt="A treatment room in dark wood, a robe hanging on the wall" data-noparallax>
+        <span class="slot-label">hero.jpg<small>the treatment room · behind the smoke (dimmed)</small></span>
+      </div>
+      <canvas class="rt-smoke" id="rtSmoke" aria-hidden="true"></canvas>
+      <div class="rt-stick" id="rtStick" aria-hidden="true"><i class="rt-ember"></i></div>
+      <div class="float-layer" id="rtFloat" aria-hidden="true"></div>
+
+      <p class="hero-info mono">
+        six rituals<br>
+        no screens, no talking<br>
+        30 to 90 minutes<br>
+        some are free, like air
+      </p>
+      <p class="hero-vert jp" aria-hidden="true">六つの儀式 ・ 香の煙</p>
+
+      <h1 class="rt-title" id="rtTitle" aria-label="Rituals"><span>r</span><span>i</span><span>t</span><span>u</span><span>a</span><span>l</span><span>s</span></h1>
+      <p class="rt-sub"><em>light one.<br>then stop doing things.</em></p>
+
+      <div class="hero-foot mono">
+        <span>(儀) — n. a ceremony</span>
+        <a href="#rtIntro" class="hero-scroll" data-cursor="in">scroll, slowly <i></i></a>
+        <span>stir the smoke ↗</span>
+      </div>
+    </section>
+
+    <!-- ============ 02 · INTRO ============ -->
+    <section class="still" id="rtIntro">
+      <div class="float-layer" data-float="香香儀霧静" data-n="16" aria-hidden="true"></div>
+      <div class="still-head">
+        <p class="kicker mono" data-scramble>(02) — what a ritual is, up here</p>
+        <p class="mono still-side">six of them<br>book at the desk, or don't<br>most start when you arrive</p>
+      </div>
+      <p class="still-text" id="stillText">a ritual is just something done slowly, on purpose,<sup>(1)</sup> more than once. up here we have six. one is a walk,<sup>(2)</sup> one is tea, one is lying down and listening to water.<sup>(3)</sup> none of them will fix you.<sup>(4)</sup> <em>all of them will help.</em><sup>(5)</sup></p>
+      <ol class="still-notes mono">
+        <li><b>(1)</b> like brushing your hair, but nicer.</li>
+        <li><b>(2)</b> in the fog. you'll be fine. probably.</li>
+        <li><b>(3)</b> the hardest one, it turns out.</li>
+        <li><b>(4)</b> you're not broken. you're tired.</li>
+        <li><b>(5)</b> or so says the fog.</li>
+      </ol>
+    </section>
+
+    <!-- ============ 03 · SIX RITUALS — a stack ============ -->
+    <section class="rt-stack" id="rtStack">
+      <header class="index-head rt-stack-head">
+        <p class="kicker mono" data-scramble>(03) — six rituals</p>
+        <p class="mono index-cols"><span>time</span><span>price</span></p>
+      </header>
+
+      <article class="rt-card" data-k="霧">
+        <div class="rt-panel">
+          <figure class="rt-ph"><div class="slot dark" data-img="RITUALS/ritual-1.jpg" data-alt="A wooden boardwalk disappearing into the fog between wet rocks" data-noparallax><span class="slot-label">ritual-1.jpg<small>the fog walk · 4:5</small></span></div><i class="rt-num mono">(i)</i></figure>
+          <div class="rt-copy">
+            <p class="mono rt-meta"><span>60 min</span><span>included</span></p>
+            <h2 class="rt-name">the fog walk</h2>
+            <p class="rt-text">the cedar boardwalk, into the fog, to the third waterfall and back. no talking, no phone, no destination. you'll hear the falls long before you see them.</p>
+            <ol class="rt-steps mono"><li><b>(1)</b> wool socks, wooden sandals</li><li><b>(2)</b> follow the rope, not your thoughts</li><li><b>(3)</b> turn back at the third waterfall</li></ol>
+            <p class="rt-when mono">every morning, 07:00 · meet at the door</p>
+          </div>
+          <i class="rt-shade" aria-hidden="true"></i>
+          <span class="rt-k jp" aria-hidden="true">霧</span>
+        </div>
+      </article>
+
+      <article class="rt-card" data-k="雪">
+        <div class="rt-panel">
+          <figure class="rt-ph"><div class="slot dark" data-img="RITUALS/ritual-2.jpg" data-alt="An open-air bath in the snow, a wooden tub floating on the water" data-noparallax><span class="slot-label">ritual-2.jpg<small>the snow bath · 4:5</small></span></div><i class="rt-num mono">(ii)</i></figure>
+          <div class="rt-copy">
+            <p class="mono rt-meta"><span>45 min</span><span>€ 44</span></p>
+            <h2 class="rt-name">the snow bath</h2>
+            <p class="rt-text">an open-air pool in the snow, a thick wooden pillar, white trees all around. a little wooden tub floats over with hot tea in it. hot water, cold face, nobody says a word.</p>
+            <ol class="rt-steps mono"><li><b>(1)</b> wait for snow (november to march)</li><li><b>(2)</b> wait for the tea to float over</li><li><b>(3)</b> sink to the chin</li></ol>
+            <p class="rt-when mono">whenever it snows · we'll ring a bell</p>
+          </div>
+          <i class="rt-shade" aria-hidden="true"></i>
+          <span class="rt-k jp" aria-hidden="true">雪</span>
+        </div>
+      </article>
+
+      <article class="rt-card" data-k="夜">
+        <div class="rt-panel">
+          <figure class="rt-ph"><div class="slot dark" data-img="RITUALS/ritual-3.jpg" data-alt="A private bath at night seen from above, a lantern on the wall" data-noparallax><span class="slot-label">ritual-3.jpg<small>the night room · 4:5</small></span></div><i class="rt-num mono">(iii)</i></figure>
+          <div class="rt-copy">
+            <p class="mono rt-meta"><span>60 min</span><span>€ 58</span></p>
+            <h2 class="rt-name">the night room</h2>
+            <p class="rt-text">after 23:00, a private cedar bath under the trees: wet stone, one lantern, a candle on the water, the falls somewhere outside. you can cry in here; the water won't tell anyone.</p>
+            <ol class="rt-steps mono"><li><b>(1)</b> one lantern, lit for you</li><li><b>(2)</b> sandals off at the stone</li><li><b>(3)</b> blow the lantern out when you leave</li></ol>
+            <p class="rt-when mono">23:00 to 02:00 · one guest at a time</p>
+          </div>
+          <i class="rt-shade" aria-hidden="true"></i>
+          <span class="rt-k jp" aria-hidden="true">夜</span>
+        </div>
+      </article>
+
+      <article class="rt-card" data-k="石">
+        <div class="rt-panel">
+          <figure class="rt-ph"><div class="slot dark" data-img="RITUALS/ritual-4.jpg" data-alt="Three small stone guardians sitting in the moss" data-noparallax><span class="slot-label">ritual-4.jpg<small>the guardians at dawn · 4:5</small></span></div><i class="rt-num mono">(iv)</i></figure>
+          <div class="rt-copy">
+            <p class="mono rt-meta"><span>30 min</span><span>included</span></p>
+            <h2 class="rt-name">the guardians at dawn</h2>
+            <p class="rt-text">three small stone guardians sit in the moss below the falls. sit down next to them at dawn, while the fog turns pink. they've been meditating for four hundred years; they'll show you how, mostly by not moving.</p>
+            <ol class="rt-steps mono"><li><b>(1)</b> up at 05:30, we'll knock</li><li><b>(2)</b> a blanket and a cushion</li><li><b>(3)</b> copy the one in the middle</li></ol>
+            <p class="rt-when mono">every dawn · about four minutes of pink</p>
+          </div>
+          <i class="rt-shade" aria-hidden="true"></i>
+          <span class="rt-k jp" aria-hidden="true">石</span>
+        </div>
+      </article>
+
+      <article class="rt-card" data-k="茶">
+        <div class="rt-panel">
+          <figure class="rt-ph"><div class="slot dark" data-img="RITUALS/ritual-5.jpg" data-alt="A bowl of matcha and an iron kettle on a tray by a window over the forest" data-noparallax><span class="slot-label">ritual-5.jpg<small>the tea hour · 4:5</small></span></div><i class="rt-num mono">(v)</i></figure>
+          <div class="rt-copy">
+            <p class="mono rt-meta"><span>45 min</span><span>€ 30</span></p>
+            <h2 class="rt-name">the tea hour</h2>
+            <p class="rt-text">matcha, whisked by someone who has done it every day for thirty years, on a long tray by the window over the forest. you will want to say something. don't.</p>
+            <ol class="rt-steps mono"><li><b>(1)</b> hold the bowl with both hands</li><li><b>(2)</b> turn it twice, towards you</li><li><b>(3)</b> three sips, the last one loud</li></ol>
+            <p class="rt-when mono">16:00 · the long window, ground floor</p>
+          </div>
+          <i class="rt-shade" aria-hidden="true"></i>
+          <span class="rt-k jp" aria-hidden="true">茶</span>
+        </div>
+      </article>
+
+      <article class="rt-card" data-k="聴">
+        <div class="rt-panel">
+          <figure class="rt-ph"><div class="slot dark" data-img="RITUALS/ritual-6.jpg" data-alt="A waterfall falling in tiers through the green forest" data-noparallax><span class="slot-label">ritual-6.jpg<small>listening to the falls · 4:5</small></span></div><i class="rt-num mono">(vi)</i></figure>
+          <div class="rt-copy">
+            <p class="mono rt-meta"><span>30 min</span><span>free, like air</span></p>
+            <h2 class="rt-name">listening to the falls</h2>
+            <p class="rt-text">waterfall no. 3 falls in eleven steps through the forest. lie on the wooden deck in front of it, a warm cloth on your eyes, and listen. that's it. it's the hardest ritual we have; most people last eight minutes the first time.</p>
+            <ol class="rt-steps mono"><li><b>(1)</b> lie down, cloth on your eyes</li><li><b>(2)</b> count the sounds inside the sound</li><li><b>(3)</b> lose count</li></ol>
+            <p class="rt-when mono">any time · the deck is always there</p>
+          </div>
+          <i class="rt-shade" aria-hidden="true"></i>
+          <span class="rt-k jp" aria-hidden="true">聴</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ 04 · HOW DO YOU FEEL ============ -->
+    <section class="rt-feel" id="rtFeel">
+      <div class="float-layer" id="feelFloat" data-n="22" aria-hidden="true"></div>
+      <p class="kicker mono" data-scramble>(04) — how do you feel?</p>
+      <ul class="feel-words" id="feelWords">
+        <li><button data-f="0">tired</button></li>
+        <li><button data-f="1">anxious</button></li>
+        <li><button data-f="2">sad</button></li>
+        <li><button data-f="3">numb</button></li>
+        <li><button data-f="4">too much</button></li>
+        <li><button data-f="5">fine, actually</button></li>
+      </ul>
+      <div class="feel-answer" id="feelAnswer" aria-live="polite">
+        <span class="feel-k jp" id="feelK">香</span>
+        <p class="feel-text" id="feelText">pick one. there's no wrong answer, only a slow one.</p>
+        <p class="feel-ritual mono" id="feelRitual">&nbsp;</p>
+      </div>
+    </section>
+
+    <!-- ============ 05 · BREATHE ============ -->
+    <section class="getin" id="getin">
+      <div class="pool slot dark" id="pool" data-img="RITUALS/end.jpg" data-alt="Pampas grass against paper windows at dusk" data-noparallax>
+        <canvas id="poolWater"></canvas>
+        <span class="slot-label">end.jpg<small>paper windows at dusk · full bleed (it ripples)</small></span>
+      </div>
+      <div class="float-layer" aria-hidden="true"></div>
+      <div class="getin-drop" id="getinDrop" aria-hidden="true"><svg><use href="#drop"/></svg></div>
+      <h2 class="getin-title" id="getinTitle" aria-label="breathe."><span>b</span><span>r</span><span>e</span><span>a</span><span>t</span><span>h</span><span>e</span><span>.</span></h2>
+      <div class="getin-foot">
+        <p class="mono">rituals are booked at the desk<br>or not at all<br>just turn up</p>
+        <a class="pill light" href="book.html" data-magnetic data-cursor="come up">book a stay <svg class="d"><use href="#drop"/></svg></a>
+        <p class="mono getin-r">the fog walk and the guardians<br>are included<br>so is the air</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" id="footer">
+    <div class="ft-cols">
+      <div>
+        <p class="mono ft-h">pages</p>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="rooms.html">The rooms</a></li>
+          <li><a href="baths.html">The baths</a></li>
+          <li><a href="mountain.html">The mountain</a></li>
+          <li><a href="journal.html">Journal</a></li>
+          <li><a href="book.html">Book a stay</a></li>
+        </ul>
+      </div>
+      <form class="ft-letter" id="letter">
+        <p class="mono ft-h">a letter, once a moon</p>
+        <label class="ft-field"><span class="sr">your email</span><input type="email" id="letterMail" placeholder="your@email" required autocomplete="off"><button type="submit" data-cursor="drop">drop it in</button></label>
+        <p class="mono ft-small">nothing is sent anywhere. we're fictional, and polite.</p>
+      </form>
+    </div>
+    <p class="ft-word" id="ftWord" aria-hidden="true"><span>s</span><span>h</span><span>i</span><span>z</span><span>u</span><span>k</span><span>u</span></p>
+    <div class="ft-bottom">
+      <p>© 2026 SHIZUKU 雫 · a fictional refuge in the fog · nothing leaves your browser</p>
+      <p class="ft-sign">concept, design &amp; code by <span class="swash">ghostly.grl</span> ♥</p>
+      <a href="#top" class="text-link" data-cursor="up">back to the surface ↑</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/rituals.js"></script>
+</body>
+  <!--
+   *    /\_/\      +
+       ( o.o )   <3  ghostly.grl
+   +    > ^ <          *
+-->
+</html>

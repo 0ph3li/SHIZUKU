@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHIZUKU 雫 — a quiet refuge in the mountains, where the fog never lifts</title>
+  <meta name="description" content="SHIZUKU: a quiet refuge and spa 1,840 m up in the Asian mountains, in a fog that never lifts. Eleven rooms, five waters, more waterfalls than guests. Phones stay in the locker.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter+Tight:wght@300;400;500;600&family=Monsieur+La+Doulaise&family=Noto+Serif+JP:wght@300;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<!--
+   SHIZUKU 雫 — home
+   concept, design & code by ghostly.grl ♥
+-->
+<body id="top" data-page="home">
+
+  <!-- shared SVG: four-point star, droplet, and the water filter used on hover -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="star" viewBox="0 0 24 24"><path d="M12 0 C13 8 16 11 24 12 C16 13 13 16 12 24 C11 16 8 13 0 12 C8 11 11 8 12 0Z"/></symbol>
+      <symbol id="ostar" viewBox="0 0 24 24"><path d="M12 2 L14.6 9 L22 9.3 L16.2 13.9 L18.2 21 L12 16.9 L5.8 21 L7.8 13.9 L2 9.3 L9.4 9 Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+      <symbol id="drop" viewBox="0 0 20 28"><path d="M10 1 C10 1 2 11.5 2 18 A8 8 0 0 0 18 18 C18 11.5 10 1 10 1Z"/></symbol>
+      <filter id="wobble" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence id="wobbleTurb" type="fractalNoise" baseFrequency="0.008 0.024" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap id="wobbleMap" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ============ LOADER — running the bath ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <svg class="loader-wave" viewBox="0 0 1440 80" preserveAspectRatio="none"><path id="loaderWave" d="M0 40 Q 180 10 360 40 T 720 40 T 1080 40 T 1440 40 V80 H0Z"/></svg>
+    <div class="loader-drop"><svg><use href="#drop"/></svg></div>
+    <div class="loader-rings"><i></i><i></i><i></i></div>
+    <div class="loader-inner">
+      <p class="loader-kanji jp">雫</p>
+      <p class="loader-word">s h i z u k u</p>
+      <div class="loader-bar"><i id="loaderBar"></i></div>
+      <p class="loader-line mono"><span id="loaderMsg">running the bath</span><span><b id="loaderTemp">12.0</b>°</span></p>
+    </div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="cursor" id="cursor" aria-hidden="true"><i></i><span></span></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="topnav" id="topnav">
+    <a class="nav-logo" href="index.html" aria-label="SHIZUKU — home">shizuku <span class="jp">雫</span></a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="index.html" aria-current="page"><span data-t="Home">Home</span></a></li>
+        <li><a href="rooms.html"><span data-t="The rooms">The rooms</span></a></li>
+        <li><a href="baths.html"><span data-t="The baths">The baths</span></a></li>
+        <li><a href="rituals.html"><span data-t="Rituals">Rituals</span></a></li>
+        <li><a href="mountain.html"><span data-t="The mountain">The mountain</span></a></li>
+        <li><a href="journal.html"><span data-t="Journal">Journal</span></a></li>
+      </ul>
+    </nav>
+    <div class="status mono" aria-label="The water right now">
+      <span class="status-open" id="statusOpen"><i></i>open now</span>
+      <span>visibility <b id="depth">12.0</b> m</span>
+      <span>water <b id="temp">38.0</b>°</span>
+    </div>
+    <a class="pill solid nav-cta" href="book.html" data-magnetic data-cursor="come up">Book a stay <svg class="d"><use href="#drop"/></svg></a>
+    <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+  </header>
+  <div class="menu" id="menu" aria-hidden="true">
+    <ul>
+      <li><a href="index.html"><small>(01)</small>Home</a></li>
+      <li><a href="rooms.html"><small>(02)</small>The rooms</a></li>
+      <li><a href="baths.html"><small>(03)</small>The baths</a></li>
+      <li><a href="rituals.html"><small>(04)</small>Rituals</a></li>
+      <li><a href="mountain.html"><small>(05)</small>The mountain</a></li>
+      <li><a href="journal.html"><small>(06)</small>Journal</a></li>
+      <li><a href="book.html"><small>(07)</small>Book a stay</a></li>
+    </ul>
+    <p class="mono">1,840 m · in the fog · water at 38° · no phones past the curtain</p>
+  </div>
+
+  <main>
+
+    <!-- ============ 01 · HERO — surface ============ -->
+    <section class="hero" id="hero" data-depth="surface">
+      <div class="hero-media slot" id="heroMedia" data-img="HOME/hero.jpg" data-alt="A lotus in dark misty water among the leaves" data-noparallax>
+        <canvas id="heroWater"></canvas>
+        <span class="slot-label">hero.jpg<small>a lotus on black water, or a figure in steam · 16:9 · full bleed (it ripples)</small></span>
+      </div>
+      <div class="hero-fog" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="hero-kanji" id="heroKanji" aria-hidden="true"></div>
+      <div class="hero-nums" id="heroNums" aria-hidden="true"></div>
+
+      <p class="hero-info mono">
+        mountain refuge &amp; baths<br>
+        1,840 m — in the fog, always<br>
+        108 waterfalls, give or take<br>
+        water at 38° all year
+      </p>
+      <p class="hero-vert jp" aria-hidden="true">霧の中の宿 ・ 一滴の静けさ</p>
+
+      <h1 class="hero-title" id="heroTitle" aria-label="Shizuku">
+        <span>s</span><span>h</span><span>i</span><span>z</span><span>u</span><span>k</span><span>u</span>
+      </h1>
+      <p class="hero-sub"><em>a refuge in the fog, for people<br>who forgot how to float.</em></p>
+
+      <div class="hero-foot mono">
+        <span>(雫) — n. a single drop of water</span>
+        <a href="#senses" class="hero-scroll" data-cursor="sink">scroll to sink <i></i></a>
+        <span>touch the water ↗ · it's 9° outside</span>
+      </div>
+    </section>
+
+    <!-- ============ 02 · STILL — what we do here ============ -->
+    <section class="still" id="still">
+      <div class="float-layer" data-float="霧霧雫滝山静" data-n="18" aria-hidden="true"></div>
+      <div class="still-head">
+        <p class="kicker mono" data-scramble>(02) — what we do here</p>
+        <p class="mono still-side">a refuge in the fog<br>1,840 m, a valley with no name<br>since 2026</p>
+      </div>
+      <p class="still-text" id="stillText">we're 1,840 m up, in a fog that never lifts.<sup>(1)</sup> there are more waterfalls than guests.<sup>(2)</sup> we take your phone at the door.<sup>(3)</sup> the water is 38°, the rooms are warm, someone brings tea.<sup>(4)</sup> you can't see the view. <em>that's the view.</em><sup>(5)</sup></p>
+      <ol class="still-notes mono" id="stillNotes">
+        <li><b>(1)</b> on the rare clear day, we close the curtains.</li>
+        <li><b>(2)</b> 108, give or take. we stopped counting.</li>
+        <li><b>(3)</b> locker 17. there's no signal up here anyway.</li>
+        <li><b>(4)</b> genmaicha, too hot, on purpose.</li>
+        <li><b>(5)</b> the fog is included in the price.</li>
+      </ol>
+    </section>
+
+    <!-- ============ 03 · INDEX — five waters ============ -->
+    <section class="index" id="baths">
+      <div class="float-layer" id="bathFloat" data-n="26" aria-hidden="true"></div>
+      <header class="index-head">
+        <p class="kicker mono" data-scramble>(03) — five places to disappear</p>
+        <p class="mono index-cols"><span>name</span><span>temp.</span><span>time</span></p>
+      </header>
+      <ul class="index-list" id="bathList">
+        <li class="row" data-k="滝" data-tone="#8fa6b5">
+          <a href="baths.html#falls" data-cursor="12°">
+            <span class="row-n mono">(01)</span>
+            <span class="row-name" data-name>falls basin</span>
+            <span class="row-k jp">滝</span>
+            <span class="row-t">12°</span>
+            <span class="row-d mono">30 sec — straight off the mountain</span>
+          </a>
+          <div class="row-media"><div class="slot dark" data-img="HOME/bath-1.jpg" data-ratio="4/5" data-alt="A stone basin in the forest, fed by the falls"><span class="slot-label">bath-1.jpg<small>the falls basin · 4:5</small></span></div></div>
+        </li>
+        <li class="row" data-k="蓮" data-tone="#e6b3c3">
+          <a href="baths.html#lotus" data-cursor="36°">
+            <span class="row-n mono">(02)</span>
+            <span class="row-name" data-name>lotus pool</span>
+            <span class="row-k jp">蓮</span>
+            <span class="row-t">36°</span>
+            <span class="row-d mono">as long as a thought lasts</span>
+          </a>
+          <div class="row-media"><div class="slot dark" data-img="HOME/bath-2.jpg" data-ratio="4/5" data-alt="Milky water with floating lotus flowers"><span class="slot-label">bath-2.jpg<small>the lotus pool: milky water, lotus · 4:5</small></span></div></div>
+        </li>
+        <li class="row" data-k="霧" data-tone="#c9cdd1">
+          <a href="baths.html#fog" data-cursor="48°">
+            <span class="row-n mono">(03)</span>
+            <span class="row-name" data-name>fog room</span>
+            <span class="row-k jp">霧</span>
+            <span class="row-t">48°</span>
+            <span class="row-d mono">12 min — the fog, but indoors</span>
+          </a>
+          <div class="row-media"><div class="slot dark" data-img="HOME/bath-3.jpg" data-ratio="4/5" data-alt="A steam room, only a silhouette visible"><span class="slot-label">bath-3.jpg<small>the fog room: steam, a silhouette · 4:5</small></span></div></div>
+        </li>
+        <li class="row" data-k="眠" data-tone="#d8b98f">
+          <a href="rooms.html" data-cursor="sleep">
+            <span class="row-n mono">(04)</span>
+            <span class="row-name" data-name>quiet room</span>
+            <span class="row-k jp">眠</span>
+            <span class="row-t">22°</span>
+            <span class="row-d mono">all night — a bed, a lamp, no clock</span>
+          </a>
+          <div class="row-media"><div class="slot dark" data-img="HOME/bath-4.jpg" data-ratio="4/5" data-alt="A warm, dim room with a low bed and a lamp"><span class="slot-label">bath-4.jpg<small>the quiet room · 4:5</small></span></div></div>
+        </li>
+        <li class="row" data-k="夜" data-tone="#5b6f8a">
+          <a href="baths.html#night" data-cursor="39°">
+            <span class="row-n mono">(05)</span>
+            <span class="row-name" data-name>night garden</span>
+            <span class="row-k jp">夜</span>
+            <span class="row-t">39°</span>
+            <span class="row-d mono">after 23:00 — lanterns, moss, the falls</span>
+          </a>
+          <div class="row-media"><div class="slot dark" data-img="HOME/bath-5.jpg" data-ratio="4/5" data-alt="An outdoor cedar tub at night under lanterns"><span class="slot-label">bath-5.jpg<small>the night bath: cedar tub, lanterns · 4:5</small></span></div></div>
+        </li>
+      </ul>
+      <div class="preview" id="preview" aria-hidden="true">
+        <canvas id="previewWater"></canvas>
+        <span class="preview-label mono" id="previewLabel"></span>
+      </div>
+    </section>
+
+    <!-- ============ 04 · LOCKER 17 — meanwhile, on your phone ============ -->
+    <section class="app" id="locker">
+      <div class="ap-top">
+        <p class="ap-cap">do you want to hear<br>the rain?</p>
+        <nav class="ap-tabs" id="apTabs" aria-label="Locker 17 view">
+          <i class="ap-ind" id="apInd"></i>
+          <button class="on" data-tab="home">home</button><button data-tab="photos">photos</button><button data-tab="steam">steam</button><button data-tab="audio">audio</button>
+        </nav>
+        <p class="ap-cap r">tap to see<br>a little preview</p>
+      </div>
+
+      <div class="ap-grid" id="apGrid">
+        <article class="ap ap-intro">
+          <p class="mono ap-kick">(04) — meanwhile, in locker 17</p>
+          <h2 class="ap-title">Don't Be In A Hurry</h2>
+          <p>your phone is in locker 17. the signal died somewhere around 1,600 m anyway. this is everything it's doing without you: nothing important. the rain is on, the fog is at 97%, the water is at 38°.</p>
+          <p>it will still be there when you get out. so will everyone. take your time, or take someone else's.</p>
+        </article>
+
+        <figure class="ap ap-ph ap-eye" data-wobble data-cursor="look">
+          <div class="slot dark" data-img="HOME/app-eye.jpg" data-alt="An eye up close, wet lashes" data-noparallax><span class="slot-label">app-eye.jpg<small>an eye up close, wet lashes · 4:3</small></span></div>
+        </figure>
+        <figure class="ap ap-ph ap-detail" data-wobble data-cursor="17">
+          <div class="slot dark" data-img="HOME/app-detail.jpg" data-alt="A metal locker door with the number 17" data-noparallax><span class="slot-label">app-detail.jpg<small>a locker, a key, metal, close · 4:3</small></span></div>
+          <span class="swash ap-s">s</span>
+        </figure>
+
+        <div class="ap-bar">
+          <button class="ap-pill" id="apTrack">track</button>
+          <label class="ap-search"><svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="5"/><path d="M11 11 L15 15"/></svg><input type="text" id="apSearch" autocomplete="off" aria-label="Search a feeling"></label>
+          <button class="ap-pill" id="apMore">more</button>
+        </div>
+
+        <figure class="ap ap-ph ap-main" data-wobble data-cursor="soak">
+          <div class="slot dark" data-img="HOME/app-main.jpg" data-alt="Someone lying back in warm water, eyes closed, hair spread out" data-noparallax><span class="slot-label">app-main.jpg<small>the big one: someone lying back in the water, eyes closed · 16:9</small></span></div>
+          <figcaption class="ap-cap-img mono">now soaking · outdoor bath · 39° · snowing</figcaption>
+        </figure>
+        <div class="ap ap-block" aria-hidden="true">
+          <span class="jp">湯</span>
+          <span class="mono">38.0°</span>
+        </div>
+        <nav class="ap ap-rail" id="apRail" aria-label="Locker 17 apps">
+          <i class="ap-rail-ind" id="apRailInd"></i>
+          <button class="on" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 11 L12 3 L21 11 V21 H14 V15 H10 V21 H3Z"/></svg></button>
+          <button aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M15 15 L21 21"/></svg></button>
+          <button aria-label="Gallery"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="13" height="13" rx="2"/><path d="M8 4 H20 V16"/></svg></button>
+          <button aria-label="Layers"><svg viewBox="0 0 24 24"><path d="M12 3 L22 8 L12 13 L2 8Z"/><path d="M2 12 L12 17 L22 12"/><path d="M2 16 L12 21 L22 16"/></svg></button>
+          <button aria-label="Signal"><svg viewBox="0 0 24 24"><path d="M4 20 V16 M9 20 V12 M14 20 V8 M19 20 V4"/></svg></button>
+          <button aria-label="Apps"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></button>
+          <button class="ap-power" id="apPower" aria-label="Switch the phone off" data-cursor="off"><svg viewBox="0 0 24 24"><path d="M12 3 V11"/><path d="M6.3 6.5 A8 8 0 1 0 17.7 6.5"/></svg></button>
+        </nav>
+
+        <article class="ap ap-profile">
+          <div class="ap-cover"><div class="slot dark" data-img="HOME/app-profile.jpg" data-alt="Wet stone steps by a pool" data-noparallax><span class="slot-label">app-profile.jpg</span></div></div>
+          <div class="ap-avatar"><div class="slot dark" data-img="HOME/app-avatar.jpg" data-ratio="1/1" data-alt="Portrait in a bathrobe" data-noparallax><span class="slot-label">app-avatar.jpg</span></div></div>
+          <p class="ap-name">guest n° <b id="apGuest">0417</b></p>
+          <p class="ap-handle">@locker17</p>
+          <ul class="ap-stats"><li><b>38°</b>water</li><li><b>0</b>signal</li><li><b>17</b>locker</li></ul>
+          <div class="ap-pills"><button class="ap-pill sm" id="apProfile">profile</button><button class="ap-pill sm" id="apMessage">message</button></div>
+        </article>
+
+        <article class="ap ap-lyric">
+          <div class="ap-lyric-txt">
+            <h3>DRIP AND<br>DROP</h3>
+            <p>drip and drop<br>we float for a while<br>time, time, time<br>yeah<br>what goes under<br>comes up slow<br>i'll tell you why<br>why, why, why.</p>
+          </div>
+          <figure class="ap-lyric-ph" data-wobble><div class="slot dark" data-img="HOME/app-lyric.jpg" data-alt="A face half underwater" data-noparallax><span class="slot-label">app-lyric.jpg</span></div></figure>
+        </article>
+
+        <article class="ap ap-article">
+          <header><h3>How To Float W A Stranger</h3><span class="ap-badge">1st<small>bath</small></span></header>
+          <p class="ap-by">Vera Yu explains how to</p>
+          <p class="ap-body">go to the lotus pool, lie back, ears under. listen to the falls. don't talk. if your feet touch, say nothing. leave before the fog does. never ask for their name.</p>
+        </article>
+
+        <article class="ap ap-notes">
+          <h3>NOTIFICATIONS</h3>
+          <div class="ap-toggle" id="apToggle"><button class="on" data-f="seen">seen</button><button data-f="all">all</button></div>
+          <ul id="apNotes"></ul>
+        </article>
+
+        <article class="ap ap-post">
+          <header><i class="ap-dot"></i><span>@shizuku.refuge</span><button class="ap-follow" id="apFollow">follow</button><span class="ap-more">···</span></header>
+          <figure class="ap-post-ph" id="apPostPh" data-cursor="double tap">
+            <div class="slot dark" data-img="HOME/app-post.jpg" data-alt="A shoulder and a tattoo, steam" data-noparallax><span class="slot-label">app-post.jpg<small>a shoulder, a tattoo, steam · 4:5</small></span></div>
+          </figure>
+          <footer><span><b class="ap-heart">♥</b> <b id="apLikes">1.2k</b></span><span>◌ 38</span><span>➤ 17</span><span class="ap-save">⌑</span></footer>
+        </article>
+
+        <article class="ap ap-rings" id="apRings">
+          <h3>The first 24 hours</h3>
+          <p class="ap-sub">up here</p>
+          <div class="ap-ring-row">
+            <figure data-v="12"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="32"/><circle class="v" cx="40" cy="40" r="32"/></svg><b>0%</b></figure>
+            <figure data-v="70"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="32"/><circle class="v" cx="40" cy="40" r="32"/></svg><b>0%</b></figure>
+            <figure data-v="4"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="32"/><circle class="v" cx="40" cy="40" r="32"/></svg><b>0%</b></figure>
+          </div>
+          <p class="ap-legend">· stress &nbsp; · sleep &nbsp; · screen time</p>
+        </article>
+
+        <article class="ap ap-player" id="apPlayer">
+          <div class="ap-cover-sm"><div class="slot dark" data-img="HOME/app-cover.jpg" data-ratio="1/1" data-alt="Album cover: rain on cedar" data-noparallax><span class="slot-label">app-cover.jpg</span></div></div>
+          <div class="ap-track"><p id="apTrackName">Rain On Cedar</p><b id="apTrackBy">Shizuku FM</b></div>
+          <div class="ap-prog"><span class="mono" id="apTime">00:00</span><i><b id="apBar"></b></i><span class="mono">∞</span></div>
+          <div class="ap-ctrl">
+            <button aria-label="Shuffle" id="apShuffle"><svg viewBox="0 0 24 24"><path d="M3 7 H7 L17 17 H21 M3 17 H7 L17 7 H21 M18 4 L21 7 L18 10 M18 14 L21 17 L18 20"/></svg></button>
+            <button aria-label="Previous" id="apPrev"><svg viewBox="0 0 24 24"><path d="M6 5 V19 M19 5 L9 12 L19 19Z"/></svg></button>
+            <button class="ap-play" aria-label="Play the rain" id="apPlay" data-cursor="listen"><span class="ico"></span></button>
+            <button aria-label="Next" id="apNext"><svg viewBox="0 0 24 24"><path d="M18 5 V19 M5 5 L15 12 L5 19Z"/></svg></button>
+            <button aria-label="Repeat"><svg viewBox="0 0 24 24"><path d="M4 12 V9 A3 3 0 0 1 7 6 H19 L16 3 M20 12 V15 A3 3 0 0 1 17 18 H5 L8 21"/></svg></button>
+          </div>
+        </article>
+
+        <div class="ap ap-pin">
+          <i class="ap-pin-av"></i>
+          <span class="ap-pin-txt"><b>⋮</b> shizuku on pinterest</span>
+          <svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="12" cy="13.5" r="3.5"/><path d="M9 7 L10.5 4 H13.5 L15 7"/></svg>
+        </div>
+
+        <article class="ap ap-presave">
+          <header><svg class="d"><use href="#drop"/></svg><h3>TAP TO PRESAVE THE<br>NEXT FULL MOON !</h3></header>
+          <p class="ap-sub" id="apMoon">the night bath under a full moon is very soon. don't miss it.</p>
+          <div class="ap-pills"><button class="ap-pill sm wine" id="apRemind">remind me</button><button class="ap-pill sm" id="apWhen">when?</button></div>
+        </article>
+
+        <article class="ap ap-brands">
+          <a href="#" data-noop><i class="ap-logo">H</i><span>Hinoki &amp; Co.</span></a>
+          <a href="#" data-noop><i class="ap-logo jp">柚</i><span>Yuzu House</span></a>
+          <a href="#" data-noop><i class="ap-logo dark">c.r</i><span>Cedar Radio · streaming rain</span></a>
+        </article>
+
+        <figure class="ap ap-ph ap-foot" data-wobble data-cursor="towel">
+          <div class="slot dark" data-img="HOME/app-foot.jpg" data-alt="Bare feet on wet cedar boards" data-noparallax><span class="slot-label">app-foot.jpg<small>bare feet on wet cedar · 4:3</small></span></div>
+        </figure>
+      </div>
+
+      <div class="ap-bottom">
+        <a class="ap-pill big" href="#baths" data-cursor="back">back</a>
+        <p class="mono">locker 17 · no signal · battery 3% · that's fine</p>
+        <a class="ap-pill big" href="#rituals" data-cursor="next">next</a>
+      </div>
+      <div class="ap-off" id="apOff" aria-hidden="true">
+        <p class="ap-off-big">locker closed.</p>
+        <p class="mono">the phone is off. go soak.</p>
+        <button class="ap-pill" id="apOn">turn it back on</button>
+      </div>
+    </section>
+
+    <!-- ============ 05 · RITUALS — diptych ============ -->
+    <section class="dip" id="rituals">
+      <div class="dip-pin">
+        <div class="dip-halves">
+          <div class="dip-half">
+            <div class="slot dark dip-img" data-img="HOME/ritual-1a.jpg" data-alt="A woman in white walking a wooden path into the forest" data-noparallax><span class="slot-label">ritual-1a.jpg<small>the fog walk, left</small></span></div>
+            <div class="slot dark dip-img" data-img="HOME/ritual-2a.jpg" data-alt="Stone guardians in thick white fog" data-noparallax><span class="slot-label">ritual-2a.jpg<small>the snow bath, left</small></span></div>
+            <div class="slot dark dip-img" data-img="HOME/ritual-3a.jpg" data-alt="A wooden tub by a paper window" data-noparallax><span class="slot-label">ritual-3a.jpg<small>the night room, left</small></span></div>
+          </div>
+          <div class="dip-half">
+            <div class="slot dark dip-img" data-img="HOME/ritual-1b.jpg" data-alt="A white lotus on black water" data-noparallax><span class="slot-label">ritual-1b.jpg<small>the fog walk, right</small></span></div>
+            <div class="slot dark dip-img" data-img="HOME/ritual-2b.jpg" data-alt="An open-air bath under the eaves, snow on the trees" data-noparallax><span class="slot-label">ritual-2b.jpg<small>the snow bath, right</small></span></div>
+            <div class="slot dark dip-img" data-img="HOME/ritual-3b.jpg" data-alt="A dark wooden room lit by one lantern" data-noparallax><span class="slot-label">ritual-3b.jpg<small>the night room, right</small></span></div>
+          </div>
+        </div>
+        <div class="dip-nums" id="dipNums" aria-hidden="true"></div>
+        <p class="dip-top mono">( <span id="dipCount">i</span> / iii ) — three rituals</p>
+        <h2 class="dip-title" id="dipTitle" aria-live="polite">the fog walk</h2>
+        <div class="dip-foot">
+          <p class="mono" id="dipMeta">60 min · included</p>
+          <p class="dip-text" id="dipText">the cedar boardwalk, into the fog, to the third waterfall and back. no talking, no phone, no destination. you'll hear the falls long before you see them.</p>
+          <a class="text-link mono" href="rituals.html" data-cursor="all three">all rituals →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 06 · GET IN ============ -->
+    <section class="getin" id="getin">
+      <div class="pool slot dark" id="pool" data-img="HOME/pool.jpg" data-alt="A tea tray with cups and a kettle, seen from above" data-noparallax>
+        <canvas id="poolWater"></canvas>
+        <span class="slot-label">pool.jpg<small>tea, from above · full bleed (it ripples)</small></span>
+      </div>
+      <div class="float-layer" data-float="雫" data-n="14" aria-hidden="true"></div>
+      <div class="getin-drop" id="getinDrop" aria-hidden="true"><svg><use href="#drop"/></svg></div>
+      <h2 class="getin-title" id="getinTitle" aria-label="stay."><span>s</span><span>t</span><span>a</span><span>y</span><span>.</span></h2>
+      <div class="getin-foot">
+        <p class="mono">check in from 15:00<br>tea at any hour<br>the fog never checks out</p>
+        <a class="pill light" href="book.html" data-magnetic data-cursor="come up">book a stay <svg class="d"><use href="#drop"/></svg></a>
+        <p class="mono getin-r">1,840 m<br>a valley with no name<br>(follow the waterfalls)</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" id="footer">
+    <div class="ft-cols">
+      <div>
+        <p class="mono ft-h">pages</p>
+        <ul>
+          <li><a href="rooms.html">The rooms</a></li>
+          <li><a href="baths.html">The baths</a></li>
+          <li><a href="rituals.html">Rituals</a></li>
+          <li><a href="mountain.html">The mountain</a></li>
+          <li><a href="journal.html">Journal</a></li>
+          <li><a href="book.html">Book a stay</a></li>
+        </ul>
+      </div>
+      <form class="ft-letter" id="letter">
+        <p class="mono ft-h">a letter, once a moon</p>
+        <label class="ft-field"><span class="sr">your email</span><input type="email" id="letterMail" placeholder="your@email" required autocomplete="off"><button type="submit" data-cursor="drop">drop it in</button></label>
+        <p class="mono ft-small">nothing is sent anywhere. we're fictional, and polite.</p>
+      </form>
+    </div>
+    <p class="ft-word" id="ftWord" aria-hidden="true"><span>s</span><span>h</span><span>i</span><span>z</span><span>u</span><span>k</span><span>u</span></p>
+    <div class="ft-bottom">
+      <p>© 2026 SHIZUKU 雫 · a fictional refuge in the fog · nothing leaves your browser</p>
+      <p class="ft-sign">concept, design &amp; code by <span class="swash">ghostly.grl</span> ♥</p>
+      <a href="#top" class="text-link" data-cursor="up">back to the surface ↑</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/home.js"></script>
+</body>
+  <!--
+   *    /\_/\      +
+       ( o.o )   <3  ghostly.grl
+   +    > ^ <          *
+-->
+</html>

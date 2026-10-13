@@ -1,0 +1,96 @@
+/* =========================================================
+   SHIZUKU 雫 — rituals.css
+   incense smoke you can stir, six rituals that stack, how do you feel?
+   (uses the shared sections from home.css: .still, .getin, .hero-*, .index-head)
+   concept, design & code by ghostly.grl ♥
+   ========================================================= */
+body[data-page="rituals"] { background: var(--ink); color: #fff; }
+
+/* =========================================================
+   01 · INCENSE
+   ========================================================= */
+.rt-hero { position: relative; height: 100vh; height: 100svh; min-height: 620px; overflow: hidden; background: #060709; color: #fff; isolation: isolate; }
+.rt-hero-media.slot { position: absolute; inset: 0; aspect-ratio: auto; border: 0; border-radius: 0; background: radial-gradient(50% 60% at 50% 70%, #1a1612, #060709 70%); }
+.rt-hero-media > img { top: 0; height: 100%; filter: brightness(.38) saturate(.7); }
+.rt-hero-media .slot-label { left: auto; right: var(--gutter); top: 96px; bottom: auto; width: 240px; text-align: right; z-index: 3; color: #fff; }
+.rt-hero-media .slot-label small { color: rgba(255, 255, 255, .5); }
+.rt-smoke { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; }
+.rt-hero .float-layer { z-index: 3; }
+.rt-hero::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: radial-gradient(120% 80% at 50% 50%, transparent 45%, rgba(5, 6, 8, .65)); }
+.rt-hero .hero-info, .rt-hero .hero-vert, .rt-hero .hero-foot { z-index: 6; }
+
+/* the stick: a thin line, a glowing tip */
+.rt-stick { position: absolute; left: 50%; bottom: 0; z-index: 4; width: 2px; height: 26vh; margin-left: -1px; background: linear-gradient(#2a221c, #4a3a2c); transform-origin: bottom; }
+.rt-ember { position: absolute; left: 50%; top: -3px; width: 6px; height: 8px; margin-left: -3px; border-radius: 50% 50% 40% 40%; background: #ff8a4a; box-shadow: 0 0 8px 2px rgba(255, 120, 60, .8), 0 0 30px 8px rgba(255, 110, 50, .25); animation: ember 2.4s ease-in-out infinite; }
+@keyframes ember { 50% { box-shadow: 0 0 5px 1px rgba(255, 120, 60, .6), 0 0 18px 4px rgba(255, 110, 50, .15); background: #e8703a; } }
+
+.rt-title {
+  position: absolute; left: 0; right: 0; top: 44%; z-index: 5; translate: 0 -58%;
+  display: flex; justify-content: center; gap: .3em; padding-left: .3em;
+  font: 300 clamp(52px, 11vw, 200px)/1 var(--sans); color: #fff; pointer-events: none;
+}
+.rt-title span { display: inline-block; will-change: transform, filter, opacity; }
+.rt-sub { position: absolute; z-index: 6; right: calc(var(--gutter) + 6vw); top: calc(44% + clamp(40px, 7vw, 120px)); font-size: clamp(20px, 2vw, 30px); line-height: 1.1; text-align: right; }
+
+/* =========================================================
+   03 · SIX RITUALS — cards that stack as you scroll
+   ========================================================= */
+.rt-stack { position: relative; background: var(--ink); padding: 110px var(--gutter) 0; }
+.rt-stack-head { margin-bottom: 10px; }
+.rt-stack .kicker { color: rgba(255, 255, 255, .55); }
+.rt-stack .index-cols { color: rgba(255, 255, 255, .5); }
+.rt-card { --i: 0; position: sticky; top: 0; height: 100vh; height: 100svh; min-height: 600px; display: flex; align-items: flex-start; padding: calc(84px + var(--i) * 12px) 0 calc(24px + (5 - var(--i)) * 12px); }
+.rt-panel {
+  position: relative; width: 100%; height: 100%; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  border-radius: 30px; overflow: hidden; background: #15181c; border: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: 0 -30px 60px -20px rgba(0, 0, 0, .7); transform-origin: 50% 0; will-change: transform;
+}
+.rt-shade { position: absolute; inset: -2px; z-index: 5; background: #050608; opacity: 0; pointer-events: none; border-radius: inherit; }
+.rt-ph { position: relative; margin: 0; border-right: 1px solid rgba(255, 255, 255, .06); overflow: hidden; }
+.rt-ph .slot { position: absolute; inset: 0; aspect-ratio: auto; border: 0; border-radius: 0; }
+.rt-num { position: absolute; left: 22px; top: 20px; z-index: 2; font-style: normal; font-size: 13px; padding: 6px 12px 5px; border-radius: 999px; background: rgba(12, 14, 17, .55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.rt-copy { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; gap: 18px; padding: clamp(24px, 4vw, 70px); }
+.rt-meta { display: flex; gap: 18px; color: rgba(255, 255, 255, .55); }
+.rt-meta span + span { color: var(--lotus); }
+.rt-name { font: 300 clamp(36px, 4.6vw, 84px)/1 var(--sans); letter-spacing: .1em; }
+.rt-name .char { will-change: transform, filter, opacity; }
+.rt-text { font: italic 300 clamp(19px, 1.6vw, 25px)/1.28 var(--serif); color: rgba(255, 255, 255, .88); max-width: 36ch; }
+.rt-steps { margin: 0; padding: 14px 0 0; list-style: none; border-top: 1px solid rgba(255, 255, 255, .12); display: flex; flex-direction: column; gap: 8px; color: rgba(255, 255, 255, .72); }
+.rt-steps b { color: var(--lotus); font-weight: 400; margin-right: 8px; }
+.rt-when { color: rgba(255, 255, 255, .4); }
+.rt-k { position: absolute; z-index: 1; right: -1vw; bottom: -6vh; font-size: clamp(200px, 26vw, 460px); line-height: 1; color: rgba(255, 255, 255, .035); pointer-events: none; }
+
+/* =========================================================
+   04 · HOW DO YOU FEEL?
+   ========================================================= */
+.rt-feel { position: relative; background: var(--ink); padding: 160px var(--gutter) 150px; overflow: hidden; }
+.rt-feel .kicker { position: relative; z-index: 3; color: rgba(255, 255, 255, .55); margin-bottom: 40px; }
+.rt-feel .float-layer span { transition: opacity .6s; }
+.feel-words { position: relative; z-index: 3; display: flex; flex-wrap: wrap; gap: .1em .5em; font: 300 clamp(40px, 7vw, 124px)/1.05 var(--sans); letter-spacing: -.04em; }
+.feel-words button { position: relative; color: rgba(255, 255, 255, .28); transition: color .6s var(--ease), letter-spacing 1s var(--ease); }
+.feel-words button:hover { color: rgba(255, 255, 255, .8); }
+.feel-words button.on { color: #fff; letter-spacing: .08em; }
+.feel-words button.on::after { content: ""; position: absolute; left: 0; right: 0; bottom: .06em; height: 2px; background: var(--lotus); transform-origin: left; animation: under .9s var(--ease) both; }
+@keyframes under { from { transform: scaleX(0); } }
+.feel-answer { position: relative; z-index: 3; display: grid; grid-template-columns: auto 1fr; gap: 10px 40px; align-items: center; margin-top: 80px; padding-top: 40px; border-top: 1px solid rgba(255, 255, 255, .14); }
+.feel-k { grid-row: span 2; font-size: clamp(90px, 12vw, 200px); line-height: 1; color: var(--lotus); }
+.feel-text { font: italic 300 clamp(24px, 2.6vw, 42px)/1.15 var(--serif); max-width: 30ch; }
+.feel-ritual { color: rgba(255, 255, 255, .55); }
+.feel-ritual a { color: #fff; border-bottom: 1px solid var(--lotus); }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+  .rt-panel { grid-template-columns: 1fr; grid-template-rows: 36% 1fr; }
+  .rt-ph { border-right: 0; border-bottom: 1px solid rgba(255, 255, 255, .06); }
+  .rt-copy { justify-content: flex-start; gap: 12px; padding: 22px; }
+  .rt-name { letter-spacing: .04em; }
+}
+@media (max-width: 700px) {
+  .rt-sub { right: var(--gutter); }
+  .rt-card { padding: calc(76px + var(--i) * 8px) 0 calc(16px + (5 - var(--i)) * 8px); }
+  .rt-text { font-size: 18px; }
+  .feel-answer { grid-template-columns: 1fr; }
+  .feel-k { grid-row: auto; }
+}

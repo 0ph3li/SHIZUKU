@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Journal — SHIZUKU 雫</title>
+  <meta name="description" content="Letters from the fog: short notes written up here by the gardener, the night porter, the tea master and the guests. Read slowly.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter+Tight:wght@200;300;400;500;600&family=Monsieur+La+Doulaise&family=Noto+Serif+JP:wght@300;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/journal.css">
+</head>
+<!--
+   SHIZUKU 雫 — journal
+   concept, design & code by ghostly.grl ♥
+-->
+<body id="top" data-page="journal">
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="drop" viewBox="0 0 20 28"><path d="M10 1 C10 1 2 11.5 2 18 A8 8 0 0 0 18 18 C18 11.5 10 1 10 1Z"/></symbol>
+      <filter id="wobble" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence id="wobbleTurb" type="fractalNoise" baseFrequency="0.008 0.024" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap id="wobbleMap" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ============ LOADER ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <svg class="loader-wave" viewBox="0 0 1440 80" preserveAspectRatio="none"><path id="loaderWave" d="M0 40 Q 180 10 360 40 T 720 40 T 1080 40 T 1440 40 V80 H0Z"/></svg>
+    <div class="loader-drop"><svg><use href="#drop"/></svg></div>
+    <div class="loader-rings"><i></i><i></i><i></i></div>
+    <div class="loader-inner">
+      <p class="loader-kanji jp">記</p>
+      <p class="loader-word">j o u r n a l</p>
+      <div class="loader-bar"><i id="loaderBar"></i></div>
+      <p class="loader-line mono"><span id="loaderMsg">sharpening the pencils</span><span><b id="loaderTemp">12.0</b>°</span></p>
+    </div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="cursor" id="cursor" aria-hidden="true"><i></i><span></span></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="topnav" id="topnav">
+    <a class="nav-logo" href="index.html" aria-label="SHIZUKU — home">shizuku <span class="jp">雫</span></a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="index.html"><span data-t="Home">Home</span></a></li>
+        <li><a href="rooms.html"><span data-t="The rooms">The rooms</span></a></li>
+        <li><a href="baths.html"><span data-t="The baths">The baths</span></a></li>
+        <li><a href="rituals.html"><span data-t="Rituals">Rituals</span></a></li>
+        <li><a href="mountain.html"><span data-t="The mountain">The mountain</span></a></li>
+        <li><a href="journal.html" aria-current="page"><span data-t="Journal">Journal</span></a></li>
+      </ul>
+    </nav>
+    <div class="status mono" aria-label="Up here right now">
+      <span class="status-open" id="statusOpen"><i></i>open now</span>
+      <span>visibility <b id="depth">12.0</b> m</span>
+      <span>water <b id="temp">38.0</b>°</span>
+    </div>
+    <a class="pill solid nav-cta" href="book.html" data-magnetic data-cursor="come up">Book a stay <svg class="d"><use href="#drop"/></svg></a>
+    <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+  </header>
+  <div class="menu" id="menu" aria-hidden="true">
+    <ul>
+      <li><a href="index.html"><small>(01)</small>Home</a></li>
+      <li><a href="rooms.html"><small>(02)</small>The rooms</a></li>
+      <li><a href="baths.html"><small>(03)</small>The baths</a></li>
+      <li><a href="rituals.html"><small>(04)</small>Rituals</a></li>
+      <li><a href="mountain.html"><small>(05)</small>The mountain</a></li>
+      <li><a href="journal.html"><small>(06)</small>Journal</a></li>
+      <li><a href="book.html"><small>(07)</small>Book a stay</a></li>
+    </ul>
+    <p class="mono">1,840 m · in the fog · water at 38° · no phones past the curtain</p>
+  </div>
+
+  <main>
+
+    <!-- ============ 01 · RAIN ON THE WINDOW ============ -->
+    <section class="jr-hero" id="jrHero">
+      <div class="jr-hero-media slot dark" data-img="JOURNAL/hero.jpg" data-alt="A bed by a big window, rain on the forest outside" data-noparallax>
+        <span class="slot-label">hero.jpg<small>a window, rain outside · behind the wet glass (blurred; sharp inside every drop)</small></span>
+      </div>
+      <canvas class="jr-rain" id="jrRain" aria-hidden="true"></canvas>
+      <div class="float-layer" id="jrFloat" aria-hidden="true"></div>
+
+      <p class="hero-info mono">
+        letters from the fog<br>
+        written up here, by hand first<br>
+        by the people who live here<br>
+        one a moon, more if it rains
+      </p>
+      <p class="hero-vert jp" aria-hidden="true">霧からの手紙 ・ 雨の日記</p>
+
+      <h1 class="jr-title" id="jrTitle" aria-label="Journal"><span>j</span><span>o</span><span>u</span><span>r</span><span>n</span><span>a</span><span>l</span></h1>
+      <p class="jr-sub"><em>it's raining.<br>good day to read.</em></p>
+
+      <div class="hero-foot mono">
+        <span>(記) — n. a record, a note</span>
+        <a href="#jrFeatured" class="hero-scroll" data-cursor="read">scroll to read <i></i></a>
+        <span>tap the glass ↗</span>
+      </div>
+    </section>
+
+    <!-- ============ 02 · FEATURED ============ -->
+    <section class="jr-feat" id="jrFeatured">
+      <div class="float-layer" data-float="記雫雨" data-n="12" aria-hidden="true"></div>
+      <p class="kicker mono" data-scramble>(02) — the latest letter</p>
+      <article class="feat" id="feat" data-post="0" data-cursor="read">
+        <figure class="feat-ph" data-wobble><div class="slot dark" data-img="JOURNAL/post-1.jpg" data-alt="Temple roofs below a mountain in the fog" data-noparallax><span class="slot-label">post-1.jpg</span></div></figure>
+        <div class="feat-copy">
+          <p class="mono feat-meta"><span id="featDate">—</span><span id="featBy">—</span></p>
+          <h2 class="feat-title" id="featTitle">—</h2>
+          <p class="feat-ex" id="featEx">—</p>
+          <button class="pill light" id="featRead" data-magnetic>read the letter →</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ 03 · ALL LETTERS ============ -->
+    <section class="jr-list" id="jrList">
+      <div class="float-layer" id="listFloat" data-n="20" aria-hidden="true"></div>
+      <header class="index-head">
+        <p class="kicker mono" data-scramble>(03) — all the letters</p>
+        <p class="mono index-cols"><span>from</span><span>read</span></p>
+      </header>
+      <ol class="letters" id="letters"></ol>
+    </section>
+
+    <!-- ============ 04 · LEAVE A NOTE ============ -->
+    <section class="jr-note" id="jrNote">
+      <div class="float-layer" data-float="雫" data-n="10" aria-hidden="true"></div>
+      <p class="kicker mono" data-scramble>(04) — write to the fog</p>
+      <h2 class="jr-note-title">leave a note<br><em>on the glass.</em></h2>
+      <form class="glass-note" id="glassNote">
+        <div class="glass-pane" id="glassPane" aria-hidden="true"><canvas id="noteFog"></canvas><p class="glass-text" id="glassText"></p></div>
+        <label class="ft-field"><span class="sr">your note</span><input type="text" id="noteInput" maxlength="48" placeholder="write something short…" autocomplete="off"><button type="submit" data-cursor="write">write it</button></label>
+        <p class="mono glass-hint">it fogs back over in a minute. like most things we say.</p>
+      </form>
+    </section>
+
+    <!-- ============ 05 · READ SLOWLY ============ -->
+    <section class="getin" id="getin">
+      <div class="pool slot dark" id="pool" data-img="JOURNAL/end.jpg" data-alt="Dark mountains in the mist" data-noparallax>
+        <canvas id="poolWater"></canvas>
+        <span class="slot-label">end.jpg<small>something far away in the fog · full bleed (it ripples)</small></span>
+      </div>
+      <div class="float-layer" aria-hidden="true"></div>
+      <div class="getin-drop" id="getinDrop" aria-hidden="true"><svg><use href="#drop"/></svg></div>
+      <h2 class="getin-title" id="getinTitle" aria-label="slowly."><span>s</span><span>l</span><span>o</span><span>w</span><span>l</span><span>y</span><span>.</span></h2>
+      <div class="getin-foot">
+        <p class="mono">a new letter every full moon<br>written by hand first<br>typed by the night porter</p>
+        <a class="pill light" href="book.html" data-magnetic data-cursor="come up">book a stay <svg class="d"><use href="#drop"/></svg></a>
+        <p class="mono getin-r">want one in your inbox?<br>it's in the footer<br>(it sends nothing, we're fictional)</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ THE READER ============ -->
+  <div class="reader" id="reader" role="dialog" aria-modal="true" aria-labelledby="rdTitle" aria-hidden="true">
+    <div class="reader-scroll" id="readerScroll">
+      <button class="pill light reader-close" id="readerClose" data-cursor="close">close ×</button>
+      <article class="rd">
+        <p class="mono rd-meta" id="rdMeta"></p>
+        <h2 class="rd-title" id="rdTitle"></h2>
+        <figure class="rd-ph"><div class="slot dark" id="rdSlot" data-ratio="16/9" data-noparallax><span class="slot-label" id="rdLabel"></span></div></figure>
+        <div class="rd-body" id="rdBody"></div>
+        <p class="rd-sign"><span class="swash" id="rdSign"></span></p>
+        <div class="rd-nav"><button class="text-link mono" id="rdPrev">← older</button><button class="text-link mono" id="rdNext">newer →</button></div>
+      </article>
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" id="footer">
+    <div class="ft-cols">
+      <div>
+        <p class="mono ft-h">pages</p>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="rooms.html">The rooms</a></li>
+          <li><a href="baths.html">The baths</a></li>
+          <li><a href="rituals.html">Rituals</a></li>
+          <li><a href="mountain.html">The mountain</a></li>
+          <li><a href="book.html">Book a stay</a></li>
+        </ul>
+      </div>
+      <form class="ft-letter" id="letter">
+        <p class="mono ft-h">a letter, once a moon</p>
+        <label class="ft-field"><span class="sr">your email</span><input type="email" id="letterMail" placeholder="your@email" required autocomplete="off"><button type="submit" data-cursor="drop">drop it in</button></label>
+        <p class="mono ft-small">nothing is sent anywhere. we're fictional, and polite.</p>
+      </form>
+    </div>
+    <p class="ft-word" id="ftWord" aria-hidden="true"><span>s</span><span>h</span><span>i</span><span>z</span><span>u</span><span>k</span><span>u</span></p>
+    <div class="ft-bottom">
+      <p>© 2026 SHIZUKU 雫 · a fictional refuge in the fog · nothing leaves your browser</p>
+      <p class="ft-sign">concept, design &amp; code by <span class="swash">ghostly.grl</span> ♥</p>
+      <a href="#top" class="text-link" data-cursor="up">back to the surface ↑</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/journal.js"></script>
+</body>
+  <!--
+   *    /\_/\      +
+       ( o.o )   <3  ghostly.grl
+   +    > ^ <          *
+-->
+</html>

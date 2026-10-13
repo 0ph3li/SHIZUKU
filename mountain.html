@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The mountain — SHIZUKU 雫</title>
+  <meta name="description" content="1,840 m up, a valley with no name, 108 waterfalls and a fog that never lifts. How to get here: a train, a bus, a car, four hundred steps, and locker 17.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter+Tight:wght@200;300;400;500;600&family=Monsieur+La+Doulaise&family=Noto+Serif+JP:wght@300;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/mountain.css">
+</head>
+<!--
+   SHIZUKU 雫 — the mountain
+   concept, design & code by ghostly.grl ♥
+-->
+<body id="top" data-page="mountain">
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="drop" viewBox="0 0 20 28"><path d="M10 1 C10 1 2 11.5 2 18 A8 8 0 0 0 18 18 C18 11.5 10 1 10 1Z"/></symbol>
+      <filter id="wobble" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence id="wobbleTurb" type="fractalNoise" baseFrequency="0.008 0.024" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap id="wobbleMap" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ============ LOADER ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <svg class="loader-wave" viewBox="0 0 1440 80" preserveAspectRatio="none"><path id="loaderWave" d="M0 40 Q 180 10 360 40 T 720 40 T 1080 40 T 1440 40 V80 H0Z"/></svg>
+    <div class="loader-drop"><svg><use href="#drop"/></svg></div>
+    <div class="loader-rings"><i></i><i></i><i></i></div>
+    <div class="loader-inner">
+      <p class="loader-kanji jp">山</p>
+      <p class="loader-word">t h e &nbsp; m o u n t a i n</p>
+      <div class="loader-bar"><i id="loaderBar"></i></div>
+      <p class="loader-line mono"><span id="loaderMsg">climbing</span><span><b id="loaderTemp">12.0</b>°</span></p>
+    </div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="cursor" id="cursor" aria-hidden="true"><i></i><span></span></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="topnav" id="topnav">
+    <a class="nav-logo" href="index.html" aria-label="SHIZUKU — home">shizuku <span class="jp">雫</span></a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="index.html"><span data-t="Home">Home</span></a></li>
+        <li><a href="rooms.html"><span data-t="The rooms">The rooms</span></a></li>
+        <li><a href="baths.html"><span data-t="The baths">The baths</span></a></li>
+        <li><a href="rituals.html"><span data-t="Rituals">Rituals</span></a></li>
+        <li><a href="mountain.html" aria-current="page"><span data-t="The mountain">The mountain</span></a></li>
+        <li><a href="journal.html"><span data-t="Journal">Journal</span></a></li>
+      </ul>
+    </nav>
+    <div class="status mono" aria-label="Up here right now">
+      <span class="status-open" id="statusOpen"><i></i>open now</span>
+      <span>visibility <b id="depth">12.0</b> m</span>
+      <span>water <b id="temp">38.0</b>°</span>
+    </div>
+    <a class="pill solid nav-cta" href="book.html" data-magnetic data-cursor="come up">Book a stay <svg class="d"><use href="#drop"/></svg></a>
+    <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+  </header>
+  <div class="menu" id="menu" aria-hidden="true">
+    <ul>
+      <li><a href="index.html"><small>(01)</small>Home</a></li>
+      <li><a href="rooms.html"><small>(02)</small>The rooms</a></li>
+      <li><a href="baths.html"><small>(03)</small>The baths</a></li>
+      <li><a href="rituals.html"><small>(04)</small>Rituals</a></li>
+      <li><a href="mountain.html"><small>(05)</small>The mountain</a></li>
+      <li><a href="journal.html"><small>(06)</small>Journal</a></li>
+      <li><a href="book.html"><small>(07)</small>Book a stay</a></li>
+    </ul>
+    <p class="mono">1,840 m · in the fog · water at 38° · no phones past the curtain</p>
+  </div>
+
+  <main>
+
+    <!-- ============ 01 · INK MOUNTAINS ============ -->
+    <section class="mt-hero" id="mtHero">
+      <div class="mt-hero-media slot dark" data-img="MOUNTAIN/hero.jpg" data-alt="Stone pillars rising out of thick fog" data-noparallax>
+        <span class="slot-label">hero.jpg<small>the peaks in the fog · full bleed</small></span>
+      </div>
+      <canvas class="mt-back" id="mtBack" aria-hidden="true"></canvas>
+      <h1 class="mt-title" id="mtTitle" aria-label="The mountain"><span>t</span><span>h</span><span>e</span><span class="sp"></span><span>m</span><span>o</span><span>u</span><span>n</span><span>t</span><span>a</span><span>i</span><span>n</span></h1>
+      <canvas class="mt-front" id="mtFront" aria-hidden="true"></canvas>
+      <div class="float-layer" id="mtFloat" aria-hidden="true"></div>
+
+      <p class="hero-info mono">
+        1,840 m above the sea<br>
+        a valley with no name<br>
+        108 waterfalls, give or take<br>
+        fog: always
+      </p>
+      <p class="hero-vert jp" aria-hidden="true">霧の山 ・ 百八の滝</p>
+      <p class="mt-sub"><em>it's there.<br>trust us.</em></p>
+
+      <div class="hero-foot mono">
+        <span>(山) — n. a mountain</span>
+        <a href="#mtWay" class="hero-scroll" data-cursor="up">scroll to climb <i></i></a>
+        <span>part the fog ↗</span>
+      </div>
+    </section>
+
+    <!-- ============ 02 · THE WAY UP ============ -->
+    <section class="mt-way" id="mtWay">
+      <div class="mt-way-pin">
+        <div class="way-photos" id="wayPhotos">
+          <div class="slot dark way-ph" data-img="MOUNTAIN/way-1.jpg" data-alt="A wet village street at dusk, one lantern lit" data-noparallax><span class="slot-label">way-1.jpg<small>320 m: the last village</small></span></div>
+          <div class="slot dark way-ph" data-img="MOUNTAIN/way-2.jpg" data-alt="A wide river in a valley under low clouds" data-noparallax><span class="slot-label">way-2.jpg<small>900 m: the river</small></span></div>
+          <div class="slot dark way-ph" data-img="MOUNTAIN/way-3.jpg" data-alt="A waterfall pouring off a dark cliff into a river" data-noparallax><span class="slot-label">way-3.jpg<small>1,200 m: waterfall no. 1</small></span></div>
+          <div class="slot dark way-ph" data-img="MOUNTAIN/way-4.jpg" data-alt="A stone path between two stone buddhas, peaks in the mist" data-noparallax><span class="slot-label">way-4.jpg<small>1,600 m: the stone path</small></span></div>
+          <div class="slot dark way-ph" data-img="MOUNTAIN/way-5.jpg" data-alt="A wooden house over a pond, pines and mist" data-noparallax><span class="slot-label">way-5.jpg<small>1,840 m: the house</small></span></div>
+        </div>
+        <i class="way-fog" aria-hidden="true"></i>
+        <p class="kicker mono way-k" data-scramble>(02) — the way up</p>
+        <p class="way-alt"><b id="wayAlt">320</b><span>m</span></p>
+        <div class="way-copy">
+          <p class="way-name" id="wayName">the last village</p>
+          <p class="way-text" id="wayText">one wet street, one lantern, one cat. after this, the road stops pretending.</p>
+        </div>
+        <div class="way-scale" aria-hidden="true">
+          <span class="mono">1,840</span>
+          <i><b id="wayNeedle"></b></i>
+          <span class="mono">0 m</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 03 · 108 WATERFALLS ============ -->
+    <section class="mt-falls" id="mtFalls">
+      <div class="float-layer" data-float="滝滝雫" data-n="16" aria-hidden="true"></div>
+      <header class="mt-falls-head">
+        <p class="kicker mono" data-scramble>(03) — 108 waterfalls, 99 on the map</p>
+        <h2 class="mt-falls-title"><b id="fallsCount">0</b> <span>/ 108</span></h2>
+        <p class="mono mt-falls-side">some have names.<br>most don't.<br>give one a name.</p>
+      </header>
+      <div class="falls-wrap">
+        <div class="falls-map" id="fallsMap">
+          <svg class="contours" id="contours" viewBox="0 0 1000 560" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <span class="map-house mono" style="--x:56%;--y:44%">雫 shizuku · 1,840 m</span>
+        </div>
+        <aside class="fall-card" id="fallCard" aria-live="polite">
+          <p class="mono fall-k">waterfall</p>
+          <p class="fall-no">no. <b id="fallNo">3</b></p>
+          <p class="fall-name" id="fallName">eleven steps. it feeds the baths.</p>
+          <form class="fall-form" id="fallForm" hidden>
+            <label class="ft-field"><span class="sr">a name for this waterfall</span><input type="text" id="fallInput" maxlength="40" placeholder="give it a name" autocomplete="off"><button type="submit">name it</button></label>
+          </form>
+          <p class="mono fall-note" id="fallNote">hover the map. every line is water.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ 04 · HOW TO GET HERE ============ -->
+    <section class="mt-route" id="mtRoute">
+      <header class="index-head">
+        <p class="kicker mono" data-scramble>(04) — how to get here</p>
+        <p class="mono">about seven hours from the city · worth it</p>
+      </header>
+      <ol class="route">
+        <li><span class="mono">(1)</span><p><b>the train</b><em>to the last station, the one with a single bench.</em></p><span class="route-t">4h</span></li>
+        <li><span class="mono">(2)</span><p><b>bus no. 41</b><em>to the end of the road. it really does end.</em></p><span class="route-t">1h20</span></li>
+        <li><span class="mono">(3)</span><p><b>our car</b><em>we pick you up. the car stops at the bridge.</em></p><span class="route-t">25′</span></li>
+        <li><span class="mono">(4)</span><p><b>on foot</b><em>four hundred stone steps. someone carries your bag.</em></p><span class="route-t">400 m</span></li>
+        <li><span class="mono">(5)</span><p><b>the curtain</b><em>your phone goes in locker 17. you're here.</em></p><span class="route-t">0′</span></li>
+      </ol>
+    </section>
+
+    <!-- ============ 05 · THE WEATHER ============ -->
+    <section class="mt-weather" id="mtWeather">
+      <p class="kicker mono" data-scramble>(05) — the week, up here</p>
+      <ul class="days" id="weatherDays"></ul>
+      <p class="mono mt-weather-note">forecast by the man who brings the tea. he's never been wrong. it's always fog.</p>
+    </section>
+
+    <!-- ============ 06 · COME UP ============ -->
+    <section class="getin" id="getin">
+      <div class="pool slot dark" id="pool" data-img="MOUNTAIN/end.jpg" data-alt="A pagoda on a ridge among misty mountains" data-noparallax>
+        <canvas id="poolWater"></canvas>
+        <span class="slot-label">end.jpg<small>a pagoda in the mountains · full bleed (it ripples)</small></span>
+      </div>
+      <div class="float-layer" aria-hidden="true"></div>
+      <div class="getin-drop" id="getinDrop" aria-hidden="true"><svg><use href="#drop"/></svg></div>
+      <h2 class="getin-title" id="getinTitle" aria-label="come up."><span>c</span><span>o</span><span>m</span><span>e</span><span class="sp"></span><span>u</span><span>p</span><span>.</span></h2>
+      <div class="getin-foot">
+        <p class="mono">we pick you up at the bridge<br>bring warm socks<br>leave the rest</p>
+        <a class="pill light" href="book.html" data-magnetic data-cursor="come up">book a stay <svg class="d"><use href="#drop"/></svg></a>
+        <p class="mono getin-r">1,840 m<br>a valley with no name<br>(follow the waterfalls)</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" id="footer">
+    <div class="ft-cols">
+      <div>
+        <p class="mono ft-h">pages</p>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="rooms.html">The rooms</a></li>
+          <li><a href="baths.html">The baths</a></li>
+          <li><a href="rituals.html">Rituals</a></li>
+          <li><a href="journal.html">Journal</a></li>
+          <li><a href="book.html">Book a stay</a></li>
+        </ul>
+      </div>
+      <form class="ft-letter" id="letter">
+        <p class="mono ft-h">a letter, once a moon</p>
+        <label class="ft-field"><span class="sr">your email</span><input type="email" id="letterMail" placeholder="your@email" required autocomplete="off"><button type="submit" data-cursor="drop">drop it in</button></label>
+        <p class="mono ft-small">nothing is sent anywhere. we're fictional, and polite.</p>
+      </form>
+    </div>
+    <p class="ft-word" id="ftWord" aria-hidden="true"><span>s</span><span>h</span><span>i</span><span>z</span><span>u</span><span>k</span><span>u</span></p>
+    <div class="ft-bottom">
+      <p>© 2026 SHIZUKU 雫 · a fictional refuge in the fog · nothing leaves your browser</p>
+      <p class="ft-sign">concept, design &amp; code by <span class="swash">ghostly.grl</span> ♥</p>
+      <a href="#top" class="text-link" data-cursor="up">back to the surface ↑</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/mountain.js"></script>
+</body>
+  <!--
+   *    /\_/\      +
+       ( o.o )   <3  ghostly.grl
+   +    > ^ <          *
+-->
+</html>

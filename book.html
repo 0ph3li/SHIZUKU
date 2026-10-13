@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book a stay — SHIZUKU 雫</title>
+  <meta name="description" content="Book a stay at SHIZUKU, 1,840 m up in the fog: pick the nights, the room, the rituals, make three small promises and sign with your finger. Nothing is sent: we're fictional, but we'll keep the water warm.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter+Tight:wght@200;300;400;500;600&family=Monsieur+La+Doulaise&family=Noto+Serif+JP:wght@300;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/book.css">
+</head>
+<!--
+   SHIZUKU 雫 — book a stay
+   concept, design & code by ghostly.grl ♥
+-->
+<body id="top" data-page="book">
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="drop" viewBox="0 0 20 28"><path d="M10 1 C10 1 2 11.5 2 18 A8 8 0 0 0 18 18 C18 11.5 10 1 10 1Z"/></symbol>
+      <filter id="wobble" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence id="wobbleTurb" type="fractalNoise" baseFrequency="0.008 0.024" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap id="wobbleMap" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ============ LOADER ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <svg class="loader-wave" viewBox="0 0 1440 80" preserveAspectRatio="none"><path id="loaderWave" d="M0 40 Q 180 10 360 40 T 720 40 T 1080 40 T 1440 40 V80 H0Z"/></svg>
+    <div class="loader-drop"><svg><use href="#drop"/></svg></div>
+    <div class="loader-rings"><i></i><i></i><i></i></div>
+    <div class="loader-inner">
+      <p class="loader-kanji jp">予約</p>
+      <p class="loader-word">b o o k &nbsp; a &nbsp; s t a y</p>
+      <div class="loader-bar"><i id="loaderBar"></i></div>
+      <p class="loader-line mono"><span id="loaderMsg">opening the big book</span><span><b id="loaderTemp">12.0</b>°</span></p>
+    </div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="cursor" id="cursor" aria-hidden="true"><i></i><span></span></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="topnav" id="topnav">
+    <a class="nav-logo" href="index.html" aria-label="SHIZUKU — home">shizuku <span class="jp">雫</span></a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="index.html"><span data-t="Home">Home</span></a></li>
+        <li><a href="rooms.html"><span data-t="The rooms">The rooms</span></a></li>
+        <li><a href="baths.html"><span data-t="The baths">The baths</span></a></li>
+        <li><a href="rituals.html"><span data-t="Rituals">Rituals</span></a></li>
+        <li><a href="mountain.html"><span data-t="The mountain">The mountain</span></a></li>
+        <li><a href="journal.html"><span data-t="Journal">Journal</span></a></li>
+      </ul>
+    </nav>
+    <div class="status mono" aria-label="Up here right now">
+      <span class="status-open" id="statusOpen"><i></i>open now</span>
+      <span>visibility <b id="depth">12.0</b> m</span>
+      <span>water <b id="temp">38.0</b>°</span>
+    </div>
+    <a class="pill solid nav-cta" href="#bkSteps" data-magnetic data-cursor="come up" aria-current="page">Book a stay <svg class="d"><use href="#drop"/></svg></a>
+    <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+  </header>
+  <div class="menu" id="menu" aria-hidden="true">
+    <ul>
+      <li><a href="index.html"><small>(01)</small>Home</a></li>
+      <li><a href="rooms.html"><small>(02)</small>The rooms</a></li>
+      <li><a href="baths.html"><small>(03)</small>The baths</a></li>
+      <li><a href="rituals.html"><small>(04)</small>Rituals</a></li>
+      <li><a href="mountain.html"><small>(05)</small>The mountain</a></li>
+      <li><a href="journal.html"><small>(06)</small>Journal</a></li>
+      <li><a href="book.html"><small>(07)</small>Book a stay</a></li>
+    </ul>
+    <p class="mono">1,840 m · in the fog · water at 38° · no phones past the curtain</p>
+  </div>
+
+  <main>
+
+    <!-- ============ 01 · THE MOON GATE ============ -->
+    <section class="bk-hero" id="bkHero">
+      <div class="gate-pin" id="gatePin">
+        <div class="gate-back slot dark" data-img="BOOK/hero.jpg" data-alt="A round moon gate opening onto a rainy garden" data-noparallax>
+          <span class="slot-label">hero.jpg<small>a moon gate, rain, a garden · the round door is the way in</small></span>
+        </div>
+        <div class="gate-front" id="gateFront" aria-hidden="true"><div class="slot dark" data-img="BOOK/hero.jpg" data-alt="" data-noparallax></div></div>
+        <svg class="gate-rings" id="gateRings" aria-hidden="true">
+          <defs><path id="gateTextPath" d=""/></defs>
+          <circle id="gateRing1" cx="0" cy="0" r="10"/>
+          <circle id="gateRing2" cx="0" cy="0" r="10"/>
+          <text id="gateText"><textPath href="#gateTextPath">book a stay · 予約 · come through the gate · 雫 · book a stay · 予約 · come through the gate · 雫 ·</textPath></text>
+        </svg>
+        <div class="float-layer" id="bkFloat" aria-hidden="true"></div>
+
+        <p class="hero-info mono">
+          eleven rooms, five waters<br>
+          from € 180 a night, tea included<br>
+          check in from 15:00<br>
+          nothing is sent: we're fictional
+        </p>
+        <p class="hero-vert jp" aria-hidden="true">月の門 ・ 予約</p>
+
+        <h1 class="bk-title" id="bkTitle" aria-label="Book a stay"><span>b</span><span>o</span><span>o</span><span>k</span><span class="sp"></span><span>a</span><span class="sp"></span><span>s</span><span>t</span><span>a</span><span>y</span></h1>
+        <p class="bk-sub"><em>the door is round.<br>so is the year, up here.</em></p>
+
+        <div class="hero-foot mono">
+          <span>(月門) — n. a moon gate</span>
+          <a href="#bkSteps" class="hero-scroll" data-cursor="come in">scroll to go through <i></i></a>
+          <span>it's raining, as usual ↗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 02 · FIVE SLOW STEPS ============ -->
+    <section class="bk-steps" id="bkSteps">
+      <div class="float-layer" data-float="雫予約" data-n="12" aria-hidden="true"></div>
+      <header class="bk-steps-head">
+        <p class="kicker mono" data-scramble>(02) — five slow steps</p>
+        <h2 class="bk-steps-title">a booking,<br><em>done slowly.</em></h2>
+        <ol class="bk-dots mono" id="bkDots" aria-label="Steps">
+          <li><a href="#stWhen">(1) when</a></li><li><a href="#stWho">(2) who</a></li><li><a href="#stRoom">(3) the room</a></li><li><a href="#stRituals">(4) rituals</a></li><li><a href="#stVow">(5) the vow</a></li>
+        </ol>
+      </header>
+
+      <div class="bk-grid">
+        <form class="bk-form" id="bkForm" novalidate>
+
+          <!-- (1) WHEN -->
+          <fieldset class="step" id="stWhen">
+            <legend><span class="mono">(1)</span> when</legend>
+            <p class="step-note">pick the night you arrive, then the morning you leave. we close on the full moon (the baths need a night off too).</p>
+            <div class="cal-head">
+              <button type="button" class="pill tiny light" id="calPrev" aria-label="Previous month">←</button>
+              <p class="cal-months mono" id="calMonths"></p>
+              <button type="button" class="pill tiny light" id="calNext" aria-label="Next month">→</button>
+            </div>
+            <div class="cal" id="cal"></div>
+            <p class="cal-legend mono"><span><i class="lg sel"></i>your nights</span><span><i class="lg full"></i>full</span><span><i class="lg moon"></i>full moon, closed</span></p>
+            <p class="step-out mono" id="whenOut">no nights yet.</p>
+          </fieldset>
+
+          <!-- (2) WHO -->
+          <fieldset class="step" id="stWho">
+            <legend><span class="mono">(2)</span> who</legend>
+            <p class="step-note">every room sleeps one or two. no children under twelve: the fog scares them, then it doesn't, then they don't want to leave.</p>
+            <div class="who-row">
+              <div class="counter" role="group" aria-label="Guests">
+                <button type="button" id="gMinus" aria-label="One guest less">−</button>
+                <p><b id="gNum">1</b><span class="mono">guest</span></p>
+                <button type="button" id="gPlus" aria-label="One guest more">+</button>
+              </div>
+              <label class="name-field">
+                <span class="mono">a name for the wooden tag</span>
+                <input type="text" id="gName" maxlength="24" placeholder="your first name" autocomplete="given-name">
+              </label>
+            </div>
+            <p class="step-out mono" id="whoOut">one guest. a quiet one, probably.</p>
+          </fieldset>
+
+          <!-- (3) THE ROOM -->
+          <fieldset class="step" id="stRoom">
+            <legend><span class="mono">(3)</span> the room</legend>
+            <p class="step-note">four kinds of quiet. all of them have a paper window and a kettle.</p>
+            <div class="rooms-pick" id="roomsPick">
+              <label class="rpick" data-price="180" data-name="the fog room" data-k="霧">
+                <input type="radio" name="room" value="fog">
+                <span class="rpick-ph"><span class="slot dark" data-img="ROOMS/room-1.jpg" data-ratio="4/3" data-alt="The fog room" data-noparallax><span class="slot-label">room-1.jpg</span></span></span>
+                <span class="rpick-t"><b>the fog room</b><i class="mono">18 m² · rain on the roof</i></span>
+                <span class="rpick-p">€ 180</span>
+              </label>
+              <label class="rpick" data-price="260" data-name="the waterfall room" data-k="滝">
+                <input type="radio" name="room" value="waterfall">
+                <span class="rpick-ph"><span class="slot dark" data-img="ROOMS/room-2.jpg" data-ratio="4/3" data-alt="The waterfall room" data-noparallax><span class="slot-label">room-2.jpg</span></span></span>
+                <span class="rpick-t"><b>the waterfall room</b><i class="mono">26 m² · waterfall no. 7</i></span>
+                <span class="rpick-p">€ 260</span>
+              </label>
+              <label class="rpick" data-price="220" data-name="the moss room" data-k="苔">
+                <input type="radio" name="room" value="moss">
+                <span class="rpick-ph"><span class="slot dark" data-img="ROOMS/room-3.jpg" data-ratio="4/3" data-alt="The moss room" data-noparallax><span class="slot-label">room-3.jpg</span></span></span>
+                <span class="rpick-t"><b>the moss room</b><i class="mono">22 m² · drips, every few seconds</i></span>
+                <span class="rpick-p">€ 220</span>
+              </label>
+              <label class="rpick" data-price="390" data-name="the cloud suite" data-k="雲">
+                <input type="radio" name="room" value="cloud">
+                <span class="rpick-ph"><span class="slot dark" data-img="ROOMS/room-4.jpg" data-ratio="4/3" data-alt="The cloud suite" data-noparallax><span class="slot-label">room-4.jpg</span></span></span>
+                <span class="rpick-t"><b>the cloud suite</b><i class="mono">40 m² · above the fog (sometimes)</i></span>
+                <span class="rpick-p">€ 390</span>
+              </label>
+            </div>
+            <p class="step-out mono" id="roomOut">no room yet. take your time.</p>
+          </fieldset>
+
+          <!-- (4) RITUALS & SMALL THINGS -->
+          <fieldset class="step" id="stRituals">
+            <legend><span class="mono">(4)</span> rituals &amp; small things</legend>
+            <p class="step-note">the fog walk and the guardians are included. the rest you can add now, or decide in your bathrobe.</p>
+            <div class="toggles" id="toggles">
+              <label class="tg" data-price="0" data-name="the fog walk"><input type="checkbox" checked disabled><span class="tg-k jp">霧</span><span class="tg-t">the fog walk<i class="mono">every morning · included</i></span><span class="tg-s" aria-hidden="true"></span></label>
+              <label class="tg" data-price="0" data-name="the guardians at dawn"><input type="checkbox" checked disabled><span class="tg-k jp">石</span><span class="tg-t">the guardians at dawn<i class="mono">05:30 · included</i></span><span class="tg-s" aria-hidden="true"></span></label>
+              <label class="tg" data-price="44" data-name="the snow bath"><input type="checkbox"><span class="tg-k jp">雪</span><span class="tg-t">the snow bath<i class="mono">45 min · € 44</i></span><span class="tg-s" aria-hidden="true"></span></label>
+              <label class="tg" data-price="58" data-name="the night room"><input type="checkbox"><span class="tg-k jp">夜</span><span class="tg-t">the night room<i class="mono">60 min · € 58</i></span><span class="tg-s" aria-hidden="true"></span></label>
+              <label class="tg" data-price="30" data-name="the tea hour"><input type="checkbox"><span class="tg-k jp">茶</span><span class="tg-t">the tea hour<i class="mono">45 min · € 30</i></span><span class="tg-s" aria-hidden="true"></span></label>
+              <label class="tg" data-price="0" data-name="listening to the falls"><input type="checkbox"><span class="tg-k jp">聴</span><span class="tg-t">listening to the falls<i class="mono">30 min · free, like air</i></span><span class="tg-s" aria-hidden="true"></span></label>
+              <label class="tg" data-price="0" data-name="a knock at 05:40"><input type="checkbox"><span class="tg-k jp">紅</span><span class="tg-t">a knock at 05:40<i class="mono">for the pink fog · free</i></span><span class="tg-s" aria-hidden="true"></span></label>
+              <label class="tg" data-price="12" data-name="wool socks to keep"><input type="checkbox"><span class="tg-k jp">靴</span><span class="tg-t">wool socks to keep<i class="mono">grey, very soft · € 12</i></span><span class="tg-s" aria-hidden="true"></span></label>
+            </div>
+            <p class="step-out mono" id="ritOut">two included. the rest is up to you.</p>
+          </fieldset>
+
+          <!-- (5) THE VOW -->
+          <fieldset class="step" id="stVow">
+            <legend><span class="mono">(5)</span> the vow</legend>
+            <p class="step-note">three small promises, then sign with your finger. it's not legally binding. it's more binding than that.</p>
+            <ul class="vows">
+              <li><label><input type="checkbox" class="vow"><span class="vow-box" aria-hidden="true"></span><span>i'll leave my phone in locker 17.</span></label></li>
+              <li><label><input type="checkbox" class="vow"><span class="vow-box" aria-hidden="true"></span><span>i won't ask for the wifi password. there isn't one.</span></label></li>
+              <li><label><input type="checkbox" class="vow"><span class="vow-box" aria-hidden="true"></span><span>i'll walk slowly, even when nobody is watching.</span></label></li>
+            </ul>
+            <div class="sign">
+              <div class="sign-pad" id="signPad" data-cursor="sign"><canvas id="signCanvas"></canvas><span class="sign-hint mono" id="signHint">sign here, with ink</span><i class="sign-line" aria-hidden="true"></i></div>
+              <button type="button" class="text-link mono" id="signClear">wipe it, start again</button>
+            </div>
+          </fieldset>
+
+          <div class="bk-submit">
+            <button type="submit" class="pill solid light bk-go" id="bkGo" data-magnetic data-cursor="hand it over">hand it over <svg class="d"><use href="#drop"/></svg></button>
+            <p class="mono">nothing leaves your browser and nothing is kept. reload, and it's gone, like a dream.</p>
+          </div>
+        </form>
+
+        <!-- the wooden tag (木札) that fills itself -->
+        <aside class="tag-col">
+          <div class="tag" id="tag" aria-live="polite">
+            <i class="tag-hole" aria-hidden="true"></i>
+            <i class="tag-rope" aria-hidden="true"></i>
+            <p class="tag-no mono">no. <b id="tagNo">17</b></p>
+            <p class="tag-k jp" id="tagK">雫</p>
+            <p class="tag-name" id="tagName">a guest</p>
+            <dl class="tag-dl mono">
+              <div><dt>arrive</dt><dd id="tArrive">—</dd></div>
+              <div><dt>nights</dt><dd id="tNights">—</dd></div>
+              <div><dt>guests</dt><dd id="tGuests">1</dd></div>
+              <div><dt>room</dt><dd id="tRoom">—</dd></div>
+              <div><dt>rituals</dt><dd id="tRit">2</dd></div>
+            </dl>
+            <p class="tag-total"><span class="mono">total</span><b>€ <span id="tTotal">0</span></b></p>
+            <div class="tag-stamp" id="tagStamp" aria-hidden="true"><span class="jp">予約</span><small>reserved</small></div>
+            <p class="tag-foot mono" id="tagFoot">fills itself as you go</p>
+          </div>
+          <button type="button" class="text-link mono tag-reset" id="tagReset" hidden>forget it, start again</button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ 03 · ALWAYS INCLUDED ============ -->
+    <section class="bk-incl" id="bkIncl">
+      <p class="kicker mono" data-scramble>(03) — always included</p>
+      <ul class="incl" id="incl">
+        <li><span class="jp">茶</span><b>tea</b><i>at any hour, too hot, on purpose</i></li>
+        <li><span class="jp">湯</span><b>all five waters</b><i>06:00 to 02:00</i></li>
+        <li><span class="jp">衣</span><b>a yukata</b><i>and two warm towels</i></li>
+        <li><span class="jp">食</span><b>dinner</b><i>eleven small plates</i></li>
+        <li><span class="jp">朝</span><b>breakfast</b><i>whenever you wake up</i></li>
+        <li><span class="jp">鍵</span><b>locker 17</b><i>or whichever is free</i></li>
+        <li><span class="jp">車</span><b>the car</b><i>from the bridge and back</i></li>
+        <li><span class="jp">霧</span><b>the fog</b><i>all of it</i></li>
+      </ul>
+    </section>
+
+    <!-- ============ 04 · THE SMALL PRINT, IN LARGE PRINT ============ -->
+    <section class="bk-faq" id="bkFaq">
+      <div class="float-layer" data-float="問雫" data-n="10" aria-hidden="true"></div>
+      <header class="index-head">
+        <p class="kicker mono" data-scramble>(04) — the small print, in large print</p>
+        <p class="mono">eight questions people actually ask</p>
+      </header>
+      <div class="faq" id="faq">
+        <details><summary><span class="mono">(1)</span>can i cancel?<i aria-hidden="true">+</i></summary><p>yes, until seven days before, for free. after that we keep one night, and the fog keeps a little of your heart. it's fine. it gives it back.</p></details>
+        <details><summary><span class="mono">(2)</span>is there really no wifi?<i aria-hidden="true">+</i></summary><p>really. there's a landline at the desk for emergencies. it has a cord. people stand next to it for a while and then go back to the bath.</p></details>
+        <details><summary><span class="mono">(3)</span>what if i need my phone for work?<i aria-hidden="true">+</i></summary><p>then this week isn't for work. we can turn your phone on once a day, at 18:00, for ten minutes, at the desk, with tea. most people stop asking on the second day.</p></details>
+        <details><summary><span class="mono">(4)</span>how do i pay?<i aria-hidden="true">+</i></summary><p>at the desk, when you leave, by card or in cash. nothing is charged when you book here. nothing is sent from here at all, actually: we're fictional.</p></details>
+        <details><summary><span class="mono">(5)</span>i don't eat fish / meat / gluten…<i aria-hidden="true">+</i></summary><p>tell us at check in. the eleven small plates change every day anyway. nobody has ever left hungry; one guest left with the recipe for the miso.</p></details>
+        <details><summary><span class="mono">(6)</span>can i bring my dog?<i aria-hidden="true">+</i></summary><p>no, sorry. the house cat would never forgive us, and she's been here longer than the roof.</p></details>
+        <details><summary><span class="mono">(7)</span>what should i pack?<i aria-hidden="true">+</i></summary><p>warm socks, a book you've been meaning to read, nothing else. we have the yukata, the towels, the sandals, the umbrellas and the fog.</p></details>
+        <details><summary><span class="mono">(8)</span>will i actually see the mountain?<i aria-hidden="true">+</i></summary><p>maybe on the last morning, for an hour, if you're lucky. most people don't. most people say that was the point.</p></details>
+      </div>
+    </section>
+
+    <!-- ============ 05 · SEE YOU IN THE FOG ============ -->
+    <section class="getin" id="getin">
+      <div class="pool slot dark" id="pool" data-img="BOOK/end.jpg" data-alt="An open-air bath on a balcony above green misty mountains" data-noparallax>
+        <canvas id="poolWater"></canvas>
+        <span class="slot-label">end.jpg<small>a bath above the mountains · full bleed (it ripples)</small></span>
+      </div>
+      <div class="float-layer" aria-hidden="true"></div>
+      <div class="getin-drop" id="getinDrop" aria-hidden="true"><svg><use href="#drop"/></svg></div>
+      <h2 class="getin-title" id="getinTitle" aria-label="see you."><span>s</span><span>e</span><span>e</span><span class="sp"></span><span>y</span><span>o</span><span>u</span><span>.</span></h2>
+      <div class="getin-foot">
+        <p class="mono">in the fog<br>at the bridge<br>at 15:00, or whenever</p>
+        <a class="pill light" href="#bkSteps" data-magnetic data-cursor="begin">back to the booking ↑</a>
+        <p class="mono getin-r">1,840 m<br>a valley with no name<br>(follow the waterfalls)</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" id="footer">
+    <div class="ft-cols">
+      <div>
+        <p class="mono ft-h">pages</p>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="rooms.html">The rooms</a></li>
+          <li><a href="baths.html">The baths</a></li>
+          <li><a href="rituals.html">Rituals</a></li>
+          <li><a href="mountain.html">The mountain</a></li>
+          <li><a href="journal.html">Journal</a></li>
+        </ul>
+      </div>
+      <form class="ft-letter" id="letter">
+        <p class="mono ft-h">a letter, once a moon</p>
+        <label class="ft-field"><span class="sr">your email</span><input type="email" id="letterMail" placeholder="your@email" required autocomplete="off"><button type="submit" data-cursor="drop">drop it in</button></label>
+        <p class="mono ft-small">nothing is sent anywhere. we're fictional, and polite.</p>
+      </form>
+    </div>
+    <p class="ft-word" id="ftWord" aria-hidden="true"><span>s</span><span>h</span><span>i</span><span>z</span><span>u</span><span>k</span><span>u</span></p>
+    <div class="ft-bottom">
+      <p>© 2026 SHIZUKU 雫 · a fictional refuge in the fog · nothing leaves your browser</p>
+      <p class="ft-sign">concept, design &amp; code by <span class="swash">ghostly.grl</span> ♥</p>
+      <a href="#top" class="text-link" data-cursor="up">back to the surface ↑</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/book.js"></script>
+</body>
+  <!--
+   *    /\_/\      +
+       ( o.o )   <3  ghostly.grl
+   +    > ^ <          *
+-->
+</html>

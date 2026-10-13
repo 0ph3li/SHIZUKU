@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The rooms — SHIZUKU 雫</title>
+  <meta name="description" content="Eleven rooms 1,840 m up in the fog. No tv, no view, no signal: a futon, a paper window, and a waterfall you can hear but never see.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter+Tight:wght@300;400;500;600&family=Monsieur+La+Doulaise&family=Noto+Serif+JP:wght@300;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/rooms.css">
+</head>
+<!--
+   SHIZUKU 雫 — the rooms
+   concept, design & code by ghostly.grl ♥
+-->
+<body id="top" data-page="rooms">
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="drop" viewBox="0 0 20 28"><path d="M10 1 C10 1 2 11.5 2 18 A8 8 0 0 0 18 18 C18 11.5 10 1 10 1Z"/></symbol>
+      <filter id="wobble" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence id="wobbleTurb" type="fractalNoise" baseFrequency="0.008 0.024" numOctaves="2" seed="7" result="n"/>
+        <feDisplacementMap id="wobbleMap" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ============ LOADER ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <svg class="loader-wave" viewBox="0 0 1440 80" preserveAspectRatio="none"><path id="loaderWave" d="M0 40 Q 180 10 360 40 T 720 40 T 1080 40 T 1440 40 V80 H0Z"/></svg>
+    <div class="loader-drop"><svg><use href="#drop"/></svg></div>
+    <div class="loader-rings"><i></i><i></i><i></i></div>
+    <div class="loader-inner">
+      <p class="loader-kanji jp">部屋</p>
+      <p class="loader-word">t h e &nbsp; r o o m s</p>
+      <div class="loader-bar"><i id="loaderBar"></i></div>
+      <p class="loader-line mono"><span id="loaderMsg">warming the rooms</span><span><b id="loaderTemp">12.0</b>°</span></p>
+    </div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+  <div class="cursor" id="cursor" aria-hidden="true"><i></i><span></span></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="topnav" id="topnav">
+    <a class="nav-logo" href="index.html" aria-label="SHIZUKU — home">shizuku <span class="jp">雫</span></a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="index.html"><span data-t="Home">Home</span></a></li>
+        <li><a href="rooms.html" aria-current="page"><span data-t="The rooms">The rooms</span></a></li>
+        <li><a href="baths.html"><span data-t="The baths">The baths</span></a></li>
+        <li><a href="rituals.html"><span data-t="Rituals">Rituals</span></a></li>
+        <li><a href="mountain.html"><span data-t="The mountain">The mountain</span></a></li>
+        <li><a href="journal.html"><span data-t="Journal">Journal</span></a></li>
+      </ul>
+    </nav>
+    <div class="status mono" aria-label="Up here right now">
+      <span class="status-open" id="statusOpen"><i></i>open now</span>
+      <span>visibility <b id="depth">12.0</b> m</span>
+      <span>water <b id="temp">38.0</b>°</span>
+    </div>
+    <a class="pill solid nav-cta" href="book.html" data-magnetic data-cursor="come up">Book a stay <svg class="d"><use href="#drop"/></svg></a>
+    <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+  </header>
+  <div class="menu" id="menu" aria-hidden="true">
+    <ul>
+      <li><a href="index.html"><small>(01)</small>Home</a></li>
+      <li><a href="rooms.html"><small>(02)</small>The rooms</a></li>
+      <li><a href="baths.html"><small>(03)</small>The baths</a></li>
+      <li><a href="rituals.html"><small>(04)</small>Rituals</a></li>
+      <li><a href="mountain.html"><small>(05)</small>The mountain</a></li>
+      <li><a href="journal.html"><small>(06)</small>Journal</a></li>
+      <li><a href="book.html"><small>(07)</small>Book a stay</a></li>
+    </ul>
+    <p class="mono">1,840 m · in the fog · water at 38° · no phones past the curtain</p>
+  </div>
+
+  <main>
+
+    <!-- ============ 01 · A FOGGED WINDOW ============ -->
+    <section class="rm-hero" id="rmHero">
+      <div class="rm-hero-media slot dark" data-img="ROOMS/hero.jpg" data-alt="A dim room with a paper window, fog outside" data-noparallax>
+        <span class="slot-label">hero.jpg<small>a room with a window and fog outside · 16:9 · behind the fogged glass</small></span>
+      </div>
+      <canvas class="rm-fog" id="rmFog" aria-hidden="true"></canvas>
+      <div class="float-layer" id="rmFloat" aria-hidden="true"></div>
+
+      <p class="hero-info mono">
+        eleven rooms<br>
+        no tv, no view, no signal<br>
+        sleeps one or two<br>
+        from € 180 a night, tea included
+      </p>
+      <p class="hero-vert jp" aria-hidden="true">霧の部屋 ・ 十一室</p>
+
+      <h1 class="rm-title" id="rmTitle" aria-label="The rooms"><span>t</span><span>h</span><span>e</span><span class="sp"></span><span>r</span><span>o</span><span>o</span><span>m</span><span>s</span></h1>
+      <p class="rm-sub"><em>you can't see the view.<br>wipe the window anyway.</em></p>
+
+      <div class="hero-foot mono">
+        <span>(部屋) — n. a room</span>
+        <a href="#rmIntro" class="hero-scroll" data-cursor="in">scroll to come in <i></i></a>
+        <span>wipe the glass ↗</span>
+      </div>
+    </section>
+
+    <!-- ============ 02 · INTRO ============ -->
+    <section class="still" id="rmIntro">
+      <div class="float-layer" data-float="霧霧部屋眠静" data-n="16" aria-hidden="true"></div>
+      <div class="still-head">
+        <p class="kicker mono" data-scramble>(02) — where you'll sleep</p>
+        <p class="mono still-side">eleven rooms, four kinds<br>wood, paper, wool<br>and a lot of white outside</p>
+      </div>
+      <p class="still-text" id="stillText">every room has a paper window,<sup>(1)</sup> a futon or a low bed, a kettle that's always warm,<sup>(2)</sup> and a waterfall you can hear but never see.<sup>(3)</sup> there's no tv and no clock.<sup>(4)</sup> <em>you'll sleep like you were nine.</em><sup>(5)</sup></p>
+      <ol class="still-notes mono">
+        <li><b>(1)</b> outside it, mostly white.</li>
+        <li><b>(2)</b> genmaicha, sencha, or just hot water.</li>
+        <li><b>(3)</b> earplugs in the drawer, no judgement.</li>
+        <li><b>(4)</b> the fog changes colour. that's the clock.</li>
+        <li><b>(5)</b> or so says every guest, on the second night.</li>
+      </ol>
+    </section>
+
+    <!-- ============ 03 · THE FOUR ROOMS ============ -->
+    <section class="rm-list" id="rmList">
+      <header class="index-head rm-list-head">
+        <p class="kicker mono" data-scramble>(03) — four kinds of quiet</p>
+        <p class="mono index-cols"><span>size</span><span>sound</span><span>a night</span></p>
+      </header>
+
+      <article class="room" data-k="霧">
+        <div class="room-top">
+          <span class="mono">(01)</span>
+          <h2 class="room-name">the fog room</h2>
+          <span class="room-k jp">霧</span>
+        </div>
+        <div class="room-body">
+          <figure class="room-main">
+            <div class="slot dark" data-img="ROOMS/room-1.jpg" data-ratio="16/10" data-alt="A dark wooden room with a low bed and walls of paper windows" data-noparallax><span class="slot-label">room-1.jpg<small>the fog room: futon, tatami, a paper window full of white · 16:10</small></span></div>
+            <i class="room-veil" aria-hidden="true"></i>
+            <div class="room-pins" data-pins='[[0.33,0.8,"the bed, low, too comfortable"],[0.46,0.55,"a window onto white"],[0.84,0.66,"the moon window"],[0.3,0.12,"wishes, left by guests"]]'></div>
+          </figure>
+          <aside class="room-side">
+            <figure class="room-detail" data-wobble><div class="slot dark" data-img="ROOMS/room-1b.jpg" data-ratio="4/5" data-alt="A detail: a cup of tea on tatami" data-noparallax><span class="slot-label">room-1b.jpg<small>a detail: tea on tatami · 4:5</small></span></div></figure>
+            <p class="room-text">the one people ask for again. a low bed, walls made of paper, and behind the paper nothing at all, just white. guests leave wishes on the ceiling.</p>
+            <dl class="room-spec mono">
+              <div><dt>size</dt><dd>18 m²</dd></div>
+              <div><dt>bed</dt><dd>low bed, linen</dd></div>
+              <div><dt>bath</dt><dd>shared, down the hall</dd></div>
+              <div><dt>sound</dt><dd>rain on the roof</dd></div>
+              <div><dt>a night</dt><dd>€ 180</dd></div>
+            </dl>
+            <a class="pill light" href="book.html?room=fog" data-magnetic data-cursor="sleep">book this room →</a>
+          </aside>
+        </div>
+      </article>
+
+      <article class="room flip" data-k="滝">
+        <div class="room-top">
+          <span class="mono">(02)</span>
+          <h2 class="room-name">the waterfall room</h2>
+          <span class="room-k jp">滝</span>
+        </div>
+        <div class="room-body">
+          <figure class="room-main">
+            <div class="slot dark" data-img="ROOMS/room-2.jpg" data-ratio="16/10" data-alt="A woman in the doorway of a dark room, a green garden beyond" data-noparallax><span class="slot-label">room-2.jpg<small>the waterfall room: low bed, cedar tub, water outside · 16:10</small></span></div>
+            <i class="room-veil" aria-hidden="true"></i>
+            <div class="room-pins" data-pins='[[0.53,0.13,"three paper moons"],[0.76,0.5,"the garden, then the falls"],[0.14,0.5,"rice paper doors"],[0.42,0.64,"you, probably"]]'></div>
+          </figure>
+          <aside class="room-side">
+            <figure class="room-detail" data-wobble><div class="slot dark" data-img="ROOMS/room-2b.jpg" data-ratio="4/5" data-alt="Water running over mossy stones" data-noparallax><span class="slot-label">room-2b.jpg<small>a detail: water, close · 4:5</small></span></div></figure>
+            <p class="room-text">waterfall no. 7 is right outside. you'll hear it all night, and by the second night you won't be able to sleep without it.</p>
+            <dl class="room-spec mono">
+              <div><dt>size</dt><dd>26 m²</dd></div>
+              <div><dt>bed</dt><dd>low bed, wool</dd></div>
+              <div><dt>bath</dt><dd>private cedar tub</dd></div>
+              <div><dt>sound</dt><dd>waterfall no. 7</dd></div>
+              <div><dt>a night</dt><dd>€ 260</dd></div>
+            </dl>
+            <a class="pill light" href="book.html?room=waterfall" data-magnetic data-cursor="sleep">book this room →</a>
+          </aside>
+        </div>
+      </article>
+
+      <article class="room" data-k="苔">
+        <div class="room-top">
+          <span class="mono">(03)</span>
+          <h2 class="room-name">the moss room</h2>
+          <span class="room-k jp">苔</span>
+        </div>
+        <div class="room-body">
+          <figure class="room-main">
+            <div class="slot dark" data-img="ROOMS/room-3.jpg" data-ratio="16/10" data-alt="A low table between paper doors opening onto a green garden" data-noparallax><span class="slot-label">room-3.jpg<small>the moss room: opens onto a moss garden, a stone lantern · 16:10</small></span></div>
+            <i class="room-veil" aria-hidden="true"></i>
+            <div class="room-pins" data-pins='[[0.62,0.42,"the moss, older than the house"],[0.5,0.72,"tea, already poured"],[0.13,0.45,"paper doors, slid open"],[0.48,0.88,"tatami, warm"]]'></div>
+          </figure>
+          <aside class="room-side">
+            <figure class="room-detail" data-wobble><div class="slot dark" data-img="ROOMS/room-3b.jpg" data-ratio="4/5" data-alt="A wooden veranda looking out onto the forest" data-noparallax><span class="slot-label">room-3b.jpg<small>a detail: moss, wet stone · 4:5</small></span></div></figure>
+            <p class="room-text">ground floor, paper doors onto a garden of moss that's been growing since before the house. the tea is poured before you sit down. the drips from the eaves keep time.</p>
+            <dl class="room-spec mono">
+              <div><dt>size</dt><dd>22 m²</dd></div>
+              <div><dt>bed</dt><dd>futon on tatami</dd></div>
+              <div><dt>bath</dt><dd>stone shower</dd></div>
+              <div><dt>sound</dt><dd>drips, every few seconds</dd></div>
+              <div><dt>a night</dt><dd>€ 220</dd></div>
+            </dl>
+            <a class="pill light" href="book.html?room=moss" data-magnetic data-cursor="sleep">book this room →</a>
+          </aside>
+        </div>
+      </article>
+
+      <article class="room flip" data-k="雲">
+        <div class="room-top">
+          <span class="mono">(04)</span>
+          <h2 class="room-name">the cloud suite</h2>
+          <span class="room-k jp">雲</span>
+        </div>
+        <div class="room-body">
+          <figure class="room-main">
+            <div class="slot dark" data-img="ROOMS/room-4.jpg" data-ratio="16/10" data-alt="A dark stone room with a long bath and a glass wall onto misty mountains" data-noparallax><span class="slot-label">room-4.jpg<small>the cloud suite: top floor, outdoor bath, fog below · 16:10</small></span></div>
+            <i class="room-veil" aria-hidden="true"></i>
+            <div class="room-pins" data-pins='[[0.38,0.66,"a bath cut from one stone"],[0.5,0.52,"the fog, below you"],[0.07,0.6,"the reading bench"],[0.9,0.48,"candles, all night"]]'></div>
+          </figure>
+          <aside class="room-side">
+            <figure class="room-detail" data-wobble><div class="slot dark" data-img="ROOMS/room-4b.jpg" data-ratio="4/5" data-alt="Mountain peaks above a sea of clouds at dawn" data-noparallax><span class="slot-label">room-4b.jpg<small>a detail: peaks above the clouds · 4:5</small></span></div></figure>
+            <p class="room-text">top floor, a wall of glass and a bath cut from one stone. some mornings the fog sinks below you and you're above the clouds for an hour. some mornings it doesn't. no refunds for weather.</p>
+            <dl class="room-spec mono">
+              <div><dt>size</dt><dd>40 m², two rooms</dd></div>
+              <div><dt>bed</dt><dd>low bed, wool</dd></div>
+              <div><dt>bath</dt><dd>private, one stone</dd></div>
+              <div><dt>sound</dt><dd>wind, then nothing</dd></div>
+              <div><dt>a night</dt><dd>€ 390</dd></div>
+            </dl>
+            <a class="pill light" href="book.html?room=cloud" data-magnetic data-cursor="sleep">book this room →</a>
+          </aside>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ 04 · IN / NOT IN YOUR ROOM ============ -->
+    <section class="rm-inout" id="rmInout">
+      <div class="float-layer" data-float="霧雫" data-n="12" aria-hidden="true"></div>
+      <p class="kicker mono" data-scramble>(04) — what's in the room</p>
+      <div class="inout">
+        <div>
+          <h3 class="inout-h">in <span class="mono">(7)</span></h3>
+          <ul class="inout-list in">
+            <li><span>a cotton yukata</span><i class="mono">01</i></li>
+            <li><span>two towels, warm</span><i class="mono">02</i></li>
+            <li><span>an iron kettle</span><i class="mono">03</i></li>
+            <li><span>a paper lantern</span><i class="mono">04</i></li>
+            <li><span>earplugs (for the falls)</span><i class="mono">05</i></li>
+            <li><span>a notebook, blank</span><i class="mono">06</i></li>
+            <li><span>wool socks</span><i class="mono">07</i></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="inout-h">not in <span class="mono">(6)</span></h3>
+          <ul class="inout-list out">
+            <li><span>a tv</span><i class="mono">—</i></li>
+            <li><span>wifi</span><i class="mono">—</i></li>
+            <li><span>a clock</span><i class="mono">—</i></li>
+            <li><span>a minibar</span><i class="mono">—</i></li>
+            <li><span>a view</span><i class="mono">—</i></li>
+            <li><span>your phone</span><i class="mono">17</i></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 05 · A NIGHT IN THE FOG ============ -->
+    <section class="rm-night" id="rmNight">
+      <div class="float-layer" data-float="夜霧雫" data-n="14" aria-hidden="true"></div>
+      <div class="rm-night-head">
+        <p class="kicker mono" data-scramble>(05) — a night in the fog</p>
+        <h2 class="rm-night-title">from tea<br><em>to tea.</em></h2>
+      </div>
+      <ol class="night" id="night">
+        <i class="night-line"><b id="nightFill"></b></i>
+        <li><time>15:00</time><p>check in. someone takes your shoes and your phone and gives you tea.</p></li>
+        <li><time>17:30</time><p>the fog comes up the valley. you can watch it swallow the trees, one by one.</p></li>
+        <li><time>19:00</time><p>dinner: eleven small plates, mostly things that grew within a kilometre.</p></li>
+        <li><time>23:00</time><p>the night garden opens. lanterns, moss, hot water, cold air.</p></li>
+        <li><time>02:00</time><p>the falls are loudest now. nobody knows why. go back to sleep.</p></li>
+        <li><time>05:40</time><p>the fog turns pink for about four minutes. we'll knock, if you want.</p></li>
+        <li><time>11:00</time><p>check out. no rush. there's tea.</p></li>
+      </ol>
+    </section>
+
+    <!-- ============ 06 · STAY ============ -->
+    <section class="getin" id="getin">
+      <div class="pool slot dark" id="pool" data-img="ROOMS/end.jpg" data-alt="A bed by a big window, rain on the forest outside" data-noparallax>
+        <canvas id="poolWater"></canvas>
+        <span class="slot-label">end.jpg<small>a bed by the window, rain · full bleed (it ripples)</small></span>
+      </div>
+      <div class="float-layer" aria-hidden="true"></div>
+      <div class="getin-drop" id="getinDrop" aria-hidden="true"><svg><use href="#drop"/></svg></div>
+      <h2 class="getin-title" id="getinTitle" aria-label="sleep."><span>s</span><span>l</span><span>e</span><span>e</span><span>p</span><span>.</span></h2>
+      <div class="getin-foot">
+        <p class="mono">check in from 15:00<br>check out at 11:00<br>no rush, there's tea</p>
+        <a class="pill light" href="book.html" data-magnetic data-cursor="come up">book a stay <svg class="d"><use href="#drop"/></svg></a>
+        <p class="mono getin-r">1,840 m<br>a valley with no name<br>(follow the waterfalls)</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" id="footer">
+    <div class="ft-cols">
+      <div>
+        <p class="mono ft-h">pages</p>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="baths.html">The baths</a></li>
+          <li><a href="rituals.html">Rituals</a></li>
+          <li><a href="mountain.html">The mountain</a></li>
+          <li><a href="journal.html">Journal</a></li>
+          <li><a href="book.html">Book a stay</a></li>
+        </ul>
+      </div>
+      <form class="ft-letter" id="letter">
+        <p class="mono ft-h">a letter, once a moon</p>
+        <label class="ft-field"><span class="sr">your email</span><input type="email" id="letterMail" placeholder="your@email" required autocomplete="off"><button type="submit" data-cursor="drop">drop it in</button></label>
+        <p class="mono ft-small">nothing is sent anywhere. we're fictional, and polite.</p>
+      </form>
+    </div>
+    <p class="ft-word" id="ftWord" aria-hidden="true"><span>s</span><span>h</span><span>i</span><span>z</span><span>u</span><span>k</span><span>u</span></p>
+    <div class="ft-bottom">
+      <p>© 2026 SHIZUKU 雫 · a fictional refuge in the fog · nothing leaves your browser</p>
+      <p class="ft-sign">concept, design &amp; code by <span class="swash">ghostly.grl</span> ♥</p>
+      <a href="#top" class="text-link" data-cursor="up">back to the surface ↑</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/rooms.js"></script>
+</body>
+  <!--
+   *    /\_/\      +
+       ( o.o )   <3  ghostly.grl
+   +    > ^ <          *
+-->
+</html>
